@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeInvader Command Panel</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #ffeaea;
+    min-height: 100vh;
+    background: 
+        linear-gradient(rgba(255,50,50,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,50,50,0.04) 1px, transparent 1px),
+        radial-gradient(circle at top, #2a1015, #0f0709 60%);
+    background-size: 36px 36px, 36px 36px, cover;
+    padding: 16px;
+}
+
+.container { max-width: 1400px; margin: 0 auto; }
+
+.header { text-align: center; padding: 30px 0 20px; }
+.header-icon {
+    width: 72px; height: 72px; margin: 0 auto;
+    border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    font-size: 34px;
+    background: rgba(255,50,50,0.12);
+    border: 1px solid rgba(255,50,50,0.35);
+    box-shadow: 0 0 35px rgba(255,50,50,0.25);
+}
+.header h1 {
+    margin-top: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 11px;
+    color: #ff4444;
+    text-shadow: 0 0 20px rgba(255,50,50,0.7);
+}
+.header p {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: #997777;
+}
+
+.tabs {
+    max-width: 900px; margin: 25px auto 20px;
+    display: flex; gap: 8px; justify-content: center;
+}
+.tab {
+    flex: 1; padding: 12px 20px;
+    background: rgba(25,15,15,0.86);
+    border: 1px solid rgba(255,50,50,0.28);
+    color: #997777; border-radius: 11px;
+    cursor: pointer; font-weight: bold;
+    letter-spacing: 2px; font-size: 12px;
+    transition: all 0.2s;
+}
+.tab:hover { color: #ff4444; border-color: rgba(255,50,50,0.6); }
+.tab.active {
+    background: rgba(190,30,30,0.25);
+    color: #ff4444;
+    border-color: #ff4444;
+    box-shadow: 0 0 15px rgba(255,50,50,0.3);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.panel {
+    background: rgba(25,15,15,0.86);
+    border: 1px solid rgba(255,50,50,0.28);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 35px rgba(255,30,30,0.08);
+}
+
+.panel-title {
+    color: #ff5555;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,50,50,0.2);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff5555;
+    font-weight: 600;
+}
+
+input[type="text"], select {
+    width: 100%;
+    padding: 11px 12px;
+    background: #180d0d;
+    border: 1px solid rgba(255,50,50,0.35);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+input:focus, select:focus {
+    outline: none;
+    border-color: #ff4444;
+    box-shadow: 0 0 15px rgba(255,50,50,0.25);
+}
+
+.grid { display: grid; gap: 10px; margin-bottom: 10px; }
+.grid-2 { grid-template-columns: 1fr 1fr; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+.cb {
+    display: flex; align-items: center;
+    gap: 6px; margin: 4px 0;
+    font-size: 13px;
+}
+.cb input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: #ff4444;
+    cursor: pointer;
+}
+.cb label {
+    margin: 0; letter-spacing: 0;
+    text-transform: none; font-size: 13px;
+    color: #ffeaea; cursor: pointer;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border: 1px solid rgba(255,50,50,0.4);
+    background: rgba(190,30,30,0.18);
+    color: #ff4444;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 800;
+    letter-spacing: 2px;
+    font-size: 13px;
+    transition: all 0.2s;
+    width: 100%;
+}
+.btn:hover {
+    background: rgba(255,50,50,0.28);
+    transform: scale(1.01);
+    box-shadow: 0 0 15px rgba(255,50,50,0.3);
+}
+
+.btn-green {
+    background: rgba(190,30,30,0.25);
+    color: #ff5555;
+    border-color: rgba(255,50,50,0.55);
+}
+.btn-green:hover {
+    background: rgba(255,50,50,0.35);
+    box-shadow: 0 0 15px rgba(255,50,50,0.4);
+}
+
+.btn-row {
+    display: flex; gap: 10px;
+    max-width: 900px; margin: 0 auto 20px;
+}
+
+.preview-wrap {
+    position: sticky; top: 10px; z-index: 50;
+    background: rgba(15,7,9,0.95);
+    border: 2px solid #ff4444;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 30px rgba(255,50,50,0.35);
+    backdrop-filter: blur(8px);
+}
+.preview-title {
+    color: #ff4444;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.preview-box {
+    background: #0d0709;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 50px;
+    font-size: 16px;
+    color: #ff6666;
+    font-weight: 700;
+    word-wrap: break-word;
+    font-family: 'Consolas', monospace;
+    line-height: 1.5;
+    text-shadow: 0 0 10px rgba(255,100,100,0.3);
+}
+.preview-box.empty {
+    color: #666;
+    font-style: italic;
+    font-weight: 400;
+    text-shadow: none;
+}
+
+.cat-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.cat-re { background: rgba(0,255,120,0.2); color: #a5d6a7; border: 1px solid rgba(0,255,120,0.4); }
+.cat-auto { background: rgba(0,150,255,0.2); color: #90caf9; border: 1px solid rgba(0,150,255,0.4); }
+.cat-biz { background: rgba(200,100,255,0.2); color: #ce93d8; border: 1px solid rgba(200,100,255,0.4); }
+.cat-disc { background: rgba(255,50,50,0.25); color: #ef9a9a; border: 1px solid rgba(255,50,50,0.5); }
+.cat-work { background: rgba(255,150,0,0.2); color: #ffcc80; border: 1px solid rgba(255,150,0,0.4); }
+.cat-date { background: rgba(255,50,150,0.2); color: #f48fb1; border: 1px solid rgba(255,50,150,0.4); }
+.cat-serv { background: rgba(0,180,180,0.2); color: #80cbc4; border: 1px solid rgba(0,180,180,0.4); }
+.cat-other { background: rgba(150,150,150,0.2); color: #b0bec5; border: 1px solid rgba(150,150,150,0.4); }
+
+.suggest-wrap { position: relative; }
+.suggestions {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: rgba(15,7,9,0.98);
+    border: 1px solid #ff4444;
+    border-radius: 0 0 10px 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+.suggestions.show { display: block; }
+.sug-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,50,50,0.15);
+    transition: background 0.15s;
+}
+.sug-item:hover { background: rgba(255,50,50,0.15); }
+.sug-cat {
+    color: #ff4444;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 3px;
+}
+.sug-name { color: #ffeaea; font-size: 13px; }
+
+.stats-bar {
+    display: flex;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 0 auto 20px;
+    font-size: 13px;
+    color: #c49f9f;
+}
+.stat-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(255,50,50,0.12);
+    border: 1px solid rgba(255,50,50,0.28);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 18px;
+}
+
+.category-card {
+    background: rgba(29,18,18,0.92);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 17px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(0,0,0,0.35);
+}
+
+.category-header {
+    padding: 15px 18px;
+    color: #ff4444;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,50,50,0.18);
+}
+.category-count {
+    font-size: 12px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    color: #c49f9f;
+}
+
+.ads-list {
+    padding: 15px;
+    max-height: 600px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ad-item {
+    padding: 11px 14px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    color: #ffe7e7;
+    cursor: pointer;
+    line-height: 1.45;
+    transition: all 0.15s;
+    position: relative;
+    font-size: 13px;
+}
+.ad-item:hover {
+    background: rgba(255,50,50,0.11);
+    border-color: rgba(255,50,50,0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255,50,50,0.12);
+}
+.ad-item.copied {
+    background: rgba(255,50,50,0.2);
+    border-color: rgba(255,80,80,0.7);
+    color: #ff6666;
+}
+.ad-item::before {
+    content: '›';
+    color: #ff4444;
+    font-weight: bold;
+    margin-right: 8px;
+}
+.ad-item.copied::after {
+    content: 'COPIED';
+    position: absolute;
+    right: 12px; top: 10px;
+    font-size: 10px;
+    color: #ff6666;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.show-more-btn {
+    padding: 10px;
+    background: rgba(255,50,50,0.08);
+    border: 1px solid rgba(255,50,50,0.2);
+    color: #ff4444;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-top: 5px;
+    transition: all 0.15s;
+}
+.show-more-btn:hover { background: rgba(255,50,50,0.16); }
+
+.rej-btn {
+    background: #21262d;
+    color: #f85149;
+    border: 1px solid #f85149;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    margin: 3px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.rej-btn:hover {
+    background: #f85149;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(248,81,73,0.5);
+}
+
+.toast {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    padding: 14px 22px;
+    background: #180808;
+    border: 1px solid #ff4444;
+    color: #ff4444;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    z-index: 999;
+    display: none;
+    box-shadow: 0 0 25px rgba(255,50,50,0.25);
+}
+.toast.show { display: block; animation: slideIn 0.3s ease; }
+
+@keyframes slideIn {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+::-webkit-scrollbar-thumb { background: rgba(255,50,50,0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,50,50,0.55); }
+
+select option { background: #180d0d; color: #fff; }
+
+.h3-title {
+    color: #ff5555;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.hint-box {
+    background: rgba(15,7,9,0.5);
+    border: 1px solid rgba(255,50,50,0.2);
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #997777;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* COLOR DROPDOWN STYLING */
+.color-select-wrap {
+    display: flex;
+    gap: 6px;
+    align-items: stretch;
+}
+.color-select-wrap select {
+    flex: 1;
+}
+.color-swatch {
+    width: 40px;
+    height: auto;
+    border: 1px solid rgba(255,50,50,0.35);
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.credit-footer {
+    text-align: center;
+    padding: 25px 20px 15px;
+    margin-top: 30px;
+    border-top: 1px solid rgba(255,50,50,0.15);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #997777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.credit-footer .heart {
+    color: #ff4444;
+    font-size: 14px;
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+.credit-footer .made-by { color: #997777; }
+.credit-footer .name {
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.credit-footer .id {
+    color: #ff4444;
+    font-size: 12px;
+}
+.credit-footer .server {
+    color: #ffffff;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin-left: 5px;
+}
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@media (max-width: 900px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .header h1 { font-size: 22px; letter-spacing: 6px; }
+    .category-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="header-icon">📡</div>
+        <h1>LIFEINVADER PANEL</h1>
+        <p>ADVERTISEMENT COMMAND INTERFACE</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('builder')">⚡ CUSTOM BUILDER</button>
+        <button class="tab" onclick="switchTab('templates')">📚 QUICK TEMPLATES</button>
+        <button class="tab" onclick="switchTab('reject')">❌ REJECTIONS</button>
+    </div>
+
+    <div class="tab-content active" id="tab-builder">
+
+        <div class="preview-wrap">
+            <div class="preview-title">
+                <span>📋 LIVE PREVIEW</span>
+                <span id="catBadge"></span>
+            </div>
+            <div class="preview-box empty" id="output">Build your ad below...</div>
+            <button class="btn btn-green" onclick="copyOutput()" style="margin-top:10px">📋 COPY TO CLIPBOARD</button>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">📝 Build Your Ad</div>
+            
+            <div class="grid grid-2">
+                <div>
+                    <label>Action (Auto-sets price type)</label>
+                    <select id="action" onchange="onActionChange()">
+                        <option value="">-- Select --</option>
+                        <option value="Selling">Selling → Price</option>
+                        <option value="Buying">Buying → Budget</option>
+                        <option value="Trading">Trading</option>
+                        <option value="Selling or trading">Selling or trading → Price</option>
+                        <option value="Renting out">Renting out → Rent</option>
+                        <option value="Renting">Renting → Budget</option>
+                        <option value="Hiring">Hiring → Salary</option>
+                        <option value="Looking for">Looking for → Dating</option>
+                        <option value="Looking to play">Looking to play → Bet</option>
+                        <option value="Party at">Party at</option>
+                        <option value="Pool party at">Pool party at</option>
+                        <option value="Wedding at">Wedding at</option>
+                        <option value="Car meet at">Car meet at</option>
+                        <option value="DJ looking for work">DJ looking for work → Work</option>
+                        <option value="Lawyer looking for work">Lawyer looking for work → Work</option>
+                        <option value="Bodyguard looking for work">Bodyguard looking for work → Work</option>
+                        <option value="Looking for a job">Looking for a job → Work</option>
+                        <option value="Looking to work as">Looking to work as → Salary</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Quantity</label>
+                    <input type="text" id="qty" placeholder="e.g. 10, 100" oninput="autoArticle();buildAd()">
+                </div>
+            </div>
+
+            <label>Item / Vehicle / Person Name (Multi-word search — e.g. "black lui vi jacket")</label>
+            <div class="suggest-wrap">
+                <input type="text" id="itemInput" placeholder="Type keywords... e.g. house, apartment, looking for wife, black lui vi" oninput="showSuggestions(this.value, 'itemInput');autoArticle();buildAd()" onfocus="showSuggestions(this.value, 'itemInput')" autocomplete="off">
+                <div class="suggestions" id="sugBox_itemInput"></div>
+            </div>
+
+            <div class="grid grid-3">
+                <div>
+                    <label>№ Number (auto removes a/an)</label>
+                    <input type="text" id="propNum" placeholder="e.g. 1023" oninput="autoArticle();buildAd()">
+                </div>
+                <div>
+                    <label>🎨 Color (Select or Type)</label>
+                    <div class="color-select-wrap">
+                        <select id="colorSelect" onchange="onColorSelect()" style="flex:1">
+                            <option value="">-- Select Color --</option>
+                            <optgroup label="🖤 Basic Colors">
+                                <option value="black">⚫ black</option>
+                                <option value="white">⚪ white</option>
+                                <option value="gray">🩶 gray</option>
+                                <option value="grey">🩶 grey</option>
+                                <option value="brown">🟤 brown</option>
+                                <option value="beige">🟨 beige</option>
+                            </optgroup>
+                            <optgroup label="🔴 Red Family">
+                                <option value="red">🔴 red</option>
+                                <option value="dark red">🟥 dark red</option>
+                                <option value="pink">🩷 pink</option>
+                                <option value="light pink">🩷 light pink</option>
+                                <option value="hot pink">🩷 hot pink</option>
+                                <option value="magenta">💗 magenta</option>
+                                <option value="maroon">🟥 maroon</option>
+                                <option value="crimson">🔴 crimson</option>
+                                <option value="coral">🟠 coral</option>
+                                <option value="salmon">🐟 salmon</option>
+                            </optgroup>
+                            <optgroup label="🟠 Orange Family">
+                                <option value="orange">🟠 orange</option>
+                                <option value="dark orange">🟧 dark orange</option>
+                                <option value="light orange">🟧 light orange</option>
+                            </optgroup>
+                            <optgroup label="🟡 Yellow Family">
+                                <option value="yellow">🟡 yellow</option>
+                                <option value="light yellow">🟨 light yellow</option>
+                                <option value="dark yellow">🟨 dark yellow</option>
+                                <option value="gold">🟡 gold</option>
+                                <option value="golden">🟡 golden</option>
+                            </optgroup>
+                            <optgroup label="🟢 Green Family">
+                                <option value="green">🟢 green</option>
+                                <option value="dark green">🟩 dark green</option>
+                                <option value="light green">🟢 light green</option>
+                                <option value="lime">🟢 lime</option>
+                                <option value="olive">🫒 olive</option>
+                                <option value="mint">🌿 mint</option>
+                                <option value="turquoise">💚 turquoise</option>
+                                <option value="teal">🩵 teal</option>
+                                <option value="neon green">💚 neon green</option>
+                            </optgroup>
+                            <optgroup label="🔵 Blue Family">
+                                <option value="blue">🔵 blue</option>
+                                <option value="dark blue">🟦 dark blue</option>
+                                <option value="light blue">🩵 light blue</option>
+                                <option value="sky blue">🩵 sky blue</option>
+                                <option value="navy">🟦 navy</option>
+                                <option value="navy blue">🟦 navy blue</option>
+                                <option value="royal blue">🔵 royal blue</option>
+                                <option value="cyan">🩵 cyan</option>
+                                <option value="aqua">🩵 aqua</option>
+                            </optgroup>
+                            <optgroup label="🟣 Purple Family">
+                                <option value="purple">🟣 purple</option>
+                                <option value="dark purple">🟪 dark purple</option>
+                                <option value="light purple">🟪 light purple</option>
+                                <option value="violet">🟣 violet</option>
+                                <option value="lavender">💜 lavender</option>
+                                <option value="indigo">🟣 indigo</option>
+                            </optgroup>
+                            <optgroup label="✨ Special">
+                                <option value="silver">⚪ silver</option>
+                                <option value="rainbow">🌈 rainbow</option>
+                                <option value="multi-colored">🌈 multi-colored</option>
+                                <option value="colorful">🌈 colorful</option>
+                                <option value="neon">💡 neon</option>
+                                <option value="fluorescent">💡 fluorescent</option>
+                                <option value="transparent">◻️ transparent</option>
+                                <option value="luminous">✨ luminous</option>
+                                <option value="glowing">✨ glowing</option>
+                                <option value="metallic">🔗 metallic</option>
+                                <option value="chrome">🔗 chrome</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label>Custom Color (overrides)</label>
+                    <input type="text" id="color" placeholder="or type custom color" oninput="buildAd()">
+                </div>
+            </div>
+
+            <div class="grid grid-3">
+                <div>
+                    <label>of Type</label>
+                    <input type="text" id="typeNum" placeholder="e.g. 5, 25" oninput="buildAd()">
+                </div>
+                <div>
+                    <label>Gender</label>
+                    <select id="gender" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="for men">for men</option>
+                        <option value="for women">for women</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Article (Auto)</label>
+                    <select id="article" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="a">a</option>
+                        <option value="an">an</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div>
+                    <label>Quality</label>
+                    <select id="quality" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="low quality">Low (L1)</option>
+                        <option value="medium quality">Medium (L2)</option>
+                        <option value="high quality">High (L3)</option>
+                        <option value="max quality">Max (L4)</option>
+                        <option value="advanced quality">Advanced (L5)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>&nbsp;</label>
+                    <div class="hint-box">💡 Color dropdown auto-fills the color field</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div>
+                    <label>2nd Item (Type to search)</label>
+                    <div class="suggest-wrap">
+                        <input type="text" id="item2" placeholder="Type keywords... e.g. diamond, gloves" oninput="showSuggestions(this.value, 'item2');buildAd()" onfocus="showSuggestions(this.value, 'item2')" autocomplete="off">
+                        <div class="suggestions" id="sugBox_item2"></div>
+                    </div>
+                </div>
+                <div>
+                    <label>3rd Item (Type to search)</label>
+                    <div class="suggest-wrap">
+                        <input type="text" id="item3" placeholder="Type keywords... e.g. wires, batteries" oninput="showSuggestions(this.value, 'item3');buildAd()" onfocus="showSuggestions(this.value, 'item3')" autocomplete="off">
+                        <div class="suggestions" id="sugBox_item3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <label>Extra Text (appears AFTER all items)</label>
+            <input type="text" id="extra" placeholder="e.g. in bulk, at Auto Fair, near the beach market" oninput="buildAd()">
+
+            <label>Category (Auto-Detected)</label>
+            <select id="adCategory" onchange="buildAd()">
+                <option value="">-- Auto Detect --</option>
+                <option value="Real Estate">🏠 Real Estate</option>
+                <option value="Auto">🚗 Auto</option>
+                <option value="Business">🏢 Business</option>
+                <option value="Discounts">💸 Discounts</option>
+                <option value="Work">👷 Work</option>
+                <option value="Dating">💕 Dating</option>
+                <option value="Services">🔧 Services</option>
+                <option value="Other">📦 Other</option>
+            </select>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">⚙️ Features</div>
+            <div class="grid grid-2">
+                <div>
+                    <div class="h3-title">🚗 Vehicle</div>
+                    <div class="features-grid">
+                        <div class="cb"><input type="checkbox" id="fFullCfg" onchange="buildAd()"><label for="fFullCfg">full configuration</label></div>
+                        <div class="cb"><input type="checkbox" id="fPartCfg" onchange="buildAd()"><label for="fPartCfg">partial configuration</label></div>
+                        <div class="cb"><input type="checkbox" id="fVisual" onchange="buildAd()"><label for="fVisual">visual upgrades</label></div>
+                        <div class="cb"><input type="checkbox" id="fLumW" onchange="buildAd()"><label for="fLumW">luminous wheels</label></div>
+                        <div class="cb"><input type="checkbox" id="fIns" onchange="buildAd()"><label for="fIns">insurance</label></div>
+                        <div class="cb"><input type="checkbox" id="fTurbo" onchange="buildAd()"><label for="fTurbo">turbo kit</label></div>
+                        <div class="cb"><input type="checkbox" id="fDrift" onchange="buildAd()"><label for="fDrift">drift kit</label></div>
+                    </div>
+                    <label>Wheel Type</label>
+                    <input type="text" id="wheelT" placeholder="e.g. 9, 25" oninput="buildAd()">
+                </div>
+                <div>
+                    <div class="h3-title">🏠 Real Estate</div>
+                    <div class="features-grid">
+                        <div class="cb"><input type="checkbox" id="rGarden" onchange="buildAd()"><label for="rGarden">a garden</label></div>
+                        <div class="cb"><input type="checkbox" id="rInterior" onchange="buildAd()"><label for="rInterior">custom interior</label></div>
+                        <div class="cb"><input type="checkbox" id="rIns" onchange="buildAd()"><label for="rIns">insurance</label></div>
+                        <div class="cb"><input type="checkbox" id="rHeli" onchange="buildAd()"><label for="rHeli">helipad</label></div>
+                        <div class="cb"><input type="checkbox" id="rPool" onchange="buildAd()"><label for="rPool">swimming pool</label></div>
+                        <div class="cb"><input type="checkbox" id="rTennis" onchange="buildAd()"><label for="rTennis">tennis court</label></div>
+                        <div class="cb"><input type="checkbox" id="rDrive" onchange="buildAd()"><label for="rDrive">long driveway</label></div>
+                        <div class="cb"><input type="checkbox" id="rBack" onchange="buildAd()"><label for="rBack">spacious backyard</label></div>
+                        <div class="cb"><input type="checkbox" id="rViews" onchange="buildAd()"><label for="rViews">nice views</label></div>
+                    </div>
+                    <div class="grid grid-2">
+                        <div>
+                            <label>Garage (g.s.)</label>
+                            <select id="rGS" onchange="buildAd()">
+                                <option value="">-</option><option>2</option><option>5</option><option>9</option><option>25</option><option>30</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Warehouse (w.h.)</label>
+                            <select id="rWH" onchange="buildAd()">
+                                <option value="">-</option><option>3</option><option>4</option><option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label>Location</label>
+                    <select id="loc" onchange="buildAd()">
+                        <option value="">None</option>
+                        <optgroup label="Official (Uppercase)">
+                            <option value="in Vinewood Hills">Vinewood Hills</option>
+                            <option value="in Rockford Hills">Rockford Hills</option>
+                            <option value="in Richman">Richman</option>
+                            <option value="in Sandy Shores">Sandy Shores</option>
+                            <option value="near Paleto Bay">Paleto Bay</option>
+                            <option value="near Mirror Park">Mirror Park</option>
+                            <option value="near Chumash">Chumash</option>
+                            <option value="near SAHP">SAHP</option>
+                            <option value="near FIB">FIB</option>
+                            <option value="near Hospital">Hospital</option>
+                            <option value="near Lifeinvader">Lifeinvader</option>
+                            <option value="near Del Perro Beach">Del Perro Beach</option>
+                            <option value="near Del Perro Pier">Del Perro Pier</option>
+                            <option value="near Stadium">Stadium</option>
+                            <option value="near Auto Fair">Auto Fair</option>
+                            <option value="near Capitol">Capitol</option>
+                            <option value="near Church">Church</option>
+                            <option value="near Hotel">Hotel</option>
+                            <option value="near School">School</option>
+                            <option value="near Fire Station">Fire Station</option>
+                            <option value="at Auto Fair">at Auto Fair</option>
+                        </optgroup>
+                        <optgroup label="Unofficial (lowercase + the)">
+                            <option value="in the city">city</option>
+                            <option value="in the ghetto">ghetto</option>
+                            <option value="near the airport">airport</option>
+                            <option value="near the beach">beach</option>
+                            <option value="near the beach market">beach market</option>
+                            <option value="near the autosalon">autosalon</option>
+                            <option value="near the post office">post office</option>
+                            <option value="near the train station">train station</option>
+                            <option value="near the yacht">yacht</option>
+                        </optgroup>
+                        <optgroup label="Apartment Complex">
+                            <option value="in Eclipse Towers">Eclipse Towers</option>
+                            <option value="in Tinsel Towers">Tinsel Towers</option>
+                            <option value="in Del Perro Heights">Del Perro Heights</option>
+                            <option value="in Richards Majestic">Richards Majestic</option>
+                            <option value="in Tinkle Building">Tinkle Building</option>
+                            <option value="in 3 Alta Street">3 Alta Street</option>
+                            <option value="in Celltowa Building">Celltowa Building</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">💰 Price (Type auto-selected based on Action)</div>
+            <div class="grid grid-4">
+                <div>
+                    <label>Type (Auto)</label>
+                    <select id="priceType" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="Price">Price</option>
+                        <option value="Budget">Budget</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Rent">Rent</option>
+                        <option value="Bet">Bet</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Amount</label>
+                    <input type="text" id="priceAmt" placeholder="e.g. 500.000" oninput="buildAd()">
+                </div>
+                <div>
+                    <label>Unit</label>
+                    <select id="priceUnit" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="Million">Million</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Suffix</label>
+                    <select id="priceSfx" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="each">each</option>
+                        <option value="each respectively">each respectively</option>
+                        <option value="per week">per week</option>
+                        <option value="per week per car">per week per car</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>2nd Price</label>
+                    <input type="text" id="price2" placeholder="e.g. $7.000 each" oninput="buildAd()">
+                </div>
+                <div>
+                    <label>3rd Price</label>
+                    <input type="text" id="price3" placeholder="e.g. $200.000" oninput="buildAd()">
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div>
+                    <label>Rental / Prime Days</label>
+                    <select id="days" onchange="buildAd()">
+                        <option value="">None</option>
+                        <option value="for 1 day">for 1 day</option>
+                        <option value="for 3 days">for 3 days</option>
+                        <option value="for 7 days">for 7 days</option>
+                        <option value="for 14 days">for 14 days</option>
+                        <option value="for 21 days">for 21 days</option>
+                        <option value="with 3 days">with 3 days (Prime)</option>
+                        <option value="with 5 days">with 5 days (Prime)</option>
+                        <option value="with 7 days">with 7 days</option>
+                        <option value="with 10 days">with 10 days</option>
+                        <option value="with 15 days">with 15 days</option>
+                        <option value="with 21 days">with 21 days</option>
+                        <option value="with 30 days">with 30 days</option>
+                        <option value="with 60 days">with 60 days</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Auto Detection Hint</label>
+                    <div class="hint-box" id="priceHint">Select action to auto-detect</div>
+                </div>
+            </div>
+            <button class="btn" onclick="clearAll()" style="margin-top:12px;background:rgba(150,50,50,0.3);border-color:#f85149;color:#f85149">🗑️ CLEAR ALL FIELDS</button>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tab-templates">
+
+        <div class="panel">
+            <div class="grid grid-4">
+                <div>
+                    <label>Category Filter</label>
+                    <select id="filterCategory" onchange="renderTemplates()">
+                        <option value="all">All Categories</option>
+                        <option value="realestate">Real Estate</option>
+                        <option value="auto">Auto</option>
+                        <option value="business">Business</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="other">Other</option>
+                        <option value="work">Work</option>
+                        <option value="dating">Dating</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Action Filter</label>
+                    <select id="filterAction" onchange="renderTemplates()">
+                        <option value="all">All Actions</option>
+                        <option value="Selling">Selling</option>
+                        <option value="Buying">Buying</option>
+                        <option value="Renting out">Renting out</option>
+                        <option value="Looking for">Looking for</option>
+                        <option value="Hiring">Hiring</option>
+                        <option value="Trading">Trading</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Price Mode</label>
+                    <select id="priceMode" onchange="regenerateTemplates()">
+                        <option value="negotiable">Negotiable</option>
+                        <option value="mixed">Mixed Prices</option>
+                        <option value="custom">Custom Price</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Price Suffix</label>
+                    <select id="priceSuffixMode" onchange="regenerateTemplates()">
+                        <option value="none">None</option>
+                        <option value="each">Each</option>
+                        <option value="each_respectively">Each Respectively</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2" style="margin-top:10px">
+                <div>
+                    <label>Search Templates (multi-word supported)</label>
+                    <input type="text" id="searchTemplates" placeholder="Search: C63, house paleto, black lui vi..." oninput="renderTemplates()">
+                </div>
+                <div>
+                    <label>Custom Price Amount</label>
+                    <input type="text" id="customPriceAmt" placeholder="e.g. 2500000" oninput="regenerateTemplates()">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn" onclick="regenerateTemplates()">🔄 REGENERATE</button>
+            <button class="btn btn-green" onclick="copyAllVisible()">📋 COPY ALL VISIBLE</button>
+        </div>
+
+        <div class="stats-bar">
+            <span class="stat-pill" id="statCount">0 ADS</span>
+            <span class="stat-pill">CLICK ANY AD TO COPY</span>
+        </div>
+
+        <div class="category-grid" id="templateGrid"></div>
+    </div>
+
+    <div class="tab-content" id="tab-reject">
+        <div class="panel">
+            <div class="panel-title">❌ Quick Rejection Reasons — Click to Copy</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+                <button class="rej-btn" onclick="cpy('Cannot advertise more than 1 vehicle at a time.')">1 Vehicle Limit</button>
+                <button class="rej-btn" onclick="cpy('Cannot advertise more than 3 items at a time.')">3 Items Limit</button>
+                <button class="rej-btn" onclick="cpy('Cannot promote illegal items.')">Illegal Items</button>
+                <button class="rej-btn" onclick="cpy('Improper advertisement.')">Improper Ad</button>
+                <button class="rej-btn" onclick="cpy('Template not found in database. Contact LI to create a new template.')">Template Not Found</button>
+                <button class="rej-btn" onclick="cpy('Please mention the Full Name.')">Full Name Required</button>
+                <button class="rej-btn" onclick="cpy('Person not found in database. (Person must be in the GRAND RP mail)')">Person Not Found</button>
+                <button class="rej-btn" onclick="cpy('Item not found in database.')">Item Not Found</button>
+                <button class="rej-btn" onclick="cpy('Insufficient information for the item name.')">Item Info Insufficient</button>
+                <button class="rej-btn" onclick="cpy('Insufficient information for the vehicle name.')">Vehicle Info Insufficient</button>
+                <button class="rej-btn" onclick="cpy('Please indicate the rental period.')">Rental Period Missing</button>
+                <button class="rej-btn" onclick="cpy('Cannot advertise this vehicle as it is non-sellable.')">Non-Sellable Vehicle</button>
+                <button class="rej-btn" onclick="cpy('Family businesses cannot be traded.')">Family Biz No Trade</button>
+                <button class="rej-btn" onclick="cpy('You cannot search for classified person.')">Classified Person</button>
+                <button class="rej-btn" onclick="cpy('Houses and apartments are not tradable.')">RE Not Tradable</button>
+                <button class="rej-btn" onclick="cpy('Please, provide the correct name of the item you are selling.')">Wrong Item Selling</button>
+                <button class="rej-btn" onclick="cpy('Please, provide the correct name of the item you are buying.')">Wrong Item Buying</button>
+                <button class="rej-btn" onclick="cpy('Cannot advertise more than 1 numbered property at a time.')">1 Property Limit</button>
+                <button class="rej-btn" onclick="cpy('We do not promote parties at any green grass location.')">Green Grass Rule</button>
+                <button class="rej-btn" onclick="cpy('A family cannot be traded.')">Family No Trade</button>
+                <button class="rej-btn" onclick="cpy('Cannot look for a classified family.')">Classified Family</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-title">🔍 Full Database Search (multi-word supported)</div>
+            <input type="text" id="dbSearch" placeholder="Search: black lui vi, luminous wheels, panda cage..." oninput="searchDB(this.value)">
+            <div id="dbResults" style="max-height:400px;overflow-y:auto;margin-top:10px"></div>
+        </div>
+    </div>
+
+</div>
+
+<div class="credit-footer">
+    <span class="heart">❤</span>
+    <span class="made-by">Made by</span>
+    <span class="name">Nym KingSlayer</span>
+    <span class="id">(166377)</span>
+    <span class="server">EN03</span>
+</div>
+
+<div class="toast" id="toast">✅ COPIED!</div>
+
+<script>
+const DB = {
+realEstate:["house","apartment","mansion","Casino penthouse","2 houses","3 houses","2 apartments","3 apartments","house with a garden","apartment with a garden","house with a swimming pool","house with helipad","house with tennis court","house with custom interior","house with insurance","house with long driveway","house with spacious backyard","house with nice views","apartment with nice views","house with 2 g.s.","house with 5 g.s.","house with 9 g.s.","house with 25 g.s.","house with 30 g.s.","apartment with 2 g.s.","apartment with 5 g.s.","apartment with 9 g.s.","apartment with 25 g.s.","apartment with 30 g.s.","house with 3 w.h.","house with 4 w.h.","house with 5 w.h."],
+dating:["Looking for (First and Last name)","Looking for a family","Looking for family members","Looking for a date","Looking for a wife","Looking for a husband","Looking for a valentine","Looking for a friend","Looking for friends","Looking for a boyfriend","Looking for boyfriends","Looking for a girlfriend","Looking for girlfriends","Looking for Name Surname","Looking for Casino poker players","Looking for a lesbian","Looking for a gay"],
+vehicles:["Adder","Alpha","Annis ZR-350","Annis 350Z","Annis Silvia (S15)","Annis Skyline GT-R (R34)","Annis GT-R I","Annis RX-7 (FD)","Annis RX-7 (Veilside Fortune)","Annis WRX 2004","Apocalypse Impaler","Apocalypse Imperator","Apocalypse Issi","Apocalypse Slamvan","Ardent","Asbo","Asea","Asterope","Autarch","Albany Escalade","Baller","Baller LE LWB","Baller SG","Banshee","Banshee 900R","Beater Emperor","Beater Mariachi Tornado","Beater Surfer","Beater Tornado","Benefactor-MG GT","Benefactor-MG C63 (W205)","Benefactor-MG C63 Coupe (W205)","Benefactor-MG G63 (G770)","Benefactor-MG S63 (W222)","Benefactor-MG VT Black Series","Benefactor-Benz 600SEL (W140)","Benefactor-Benz E420 (W210)","Benefactor-Benz Vito (V447)","Benefactor-Maybach Pullman","Bestia GTS","BF Injection","Bison","Blade","Blista","Blista Kanjo","Bodhi","Brawler","Bravado Charger SRT","Bravado Charger 1969","Bravado Challenger 2016","Bravado Ram 1500","Bravado Viper 2008","Brioso R/A","Buccaneer","Buffalo","Bullet","Benefactor-MG SL65 (R230)","Burgerfahrzeug Golf GTI Vision","Canis Grand Cherokee","Calico GTF","Caracara 4x4","Carbonizzare","Casco","Cavalcade","Cheburek","Cheetah","Cheetah Classic","Chino","Clique","Coil Cybertruck","Coil Model S","Coil Model X","Coil Roadster","Cognoscenti","Cognoscenti 55","Cognoscenti Cabrio","Comet","Comet S2","Comet SR","Contender","Coquette","Coquette Blackfin","Coquette D10","Coquette Classic","Cyclone","Cypher","Declasse Corvette C7","Declasse Tahoe","Deveste Eight","Deviant","Dilettante","Dinka RT-3000","Dinka NSX 2017","Dominator","Dominator ASP","Dominator GTT","Dominator GTX","Dominator PiBwasser","Drift Yosemite","Dubsta","Dubsta 6x6","Dubsta SG","Dukes","Declasse Camaro 2020","Elegy Retro Custom","Elegy RH8","Ellie","Emperor","Emperor LX-570","Emperor RCF","Entity XF","Enus Cullinan","Enus Phantom","Enus Spectre","Enus Continental GT","ETR-1","Euros","Exemplar","F620","Faction","Felon","Felon GT","Feltzer","Flash GT","FMJ","FQ 2","Fugitive","Furore GT","Fusillade","Futo","Futo GTX","Future Shock Issi","Gallivanter Defender","Gallivanter Defender Halloween Edition","Gallivanter Defender Christmas Edition","Gauntlet","Gauntlet Classic","Gauntlet Hellfire","Gauntlet Redwood","GB200","Glendale","GP-1","Granger","Grotti Italia (F458)","GT 500","Hermes","Hotknife","Huntley S","Imorgon","Impaler","Infernus","Infernus Classic","Ingot","Issi","Itali GTB","Itali GTB Custom","Itali GTO","Jackal","JB 700","Jester","Jester (Racecar)","Jester Classic","Jester RR","Journey","Jugular","Kamacho","Khamelion","Komoda","Krieger","Karin Land Cruiser 200","Karin Tundra 2021","Karin Supra A80","Karin Mark 2","Lampadati Giulia GTA","Landstalker","Lynx","Mamba","Massacro","Mammoth HUM EV","Monroe","Moonbeam","Monowheel","Nebula Turbo","Neon","Nero","Nero Custom","Nightshade","Novak","Oracle","Osiris","Obey A8","Obey R8","Obey RS6","Obey RS7","Obey S8 (D4)","Ocelot Victor","Ocelot F-Type R","Obey A6","Obey Q8","Ocelot Vanquish Zagto SB","Ocelot Eletre","Panto","Paragon R","Pariah","Patriot","Patriot Stretch","Pegassi Huayra BC","Pegassi Performante (LP640)","Penetrator","Penumbra","Peyote Gasser","Pfister 811","Pfister Panamera","Pfister Taycan","Pfister 918 Spyder","Pheonix","Picador","Prairie","Premier","Previon","Progen 675 LT","Raiden","Rancher XL","Rapid GT","Raptor","Rat-Loader","Rat-Truck","RE-7B","Reaper","Rebel","Rebla GTS","Regina","Remus","Revolter","Rhapsody","Riata","Rocoto","Ruiner","Rumpo","Ruston","Rusty Rebel","Sabre Turbo","Sandking SWB","Sandking XL","SC-1","Schafter","Schafter LWB","Schafter LWB (Armored)","Schafter V12","Schlagen GT","Schwarzer","Seminole","Sentinel Classic","Sentinel XS","Serrano","Seven-70","Shelby GT500","Slam Van","Slamvan Custom","Specter","Stafford","Stallion","Stinger","Stinger GT","Stirling GT","Streiter","Stretch","Sultan","Sultan Classic","Sultan RS","Sultan RS Classic","Super Diamond","Surano","Surge","Swinger","T-20","Tailgater","Tailgater S","Taipan","Tampa","Tempesta","Tezeract","Thrax","Tigon","Torero","Toros","Tropos Rallye","Truffade Centodieci","Truffade Chiron","Tulip","Turismo Classic","Turismo R","Tyrant","Tyrus","Ubermacht 760 (LI)","Ubermacht I8","Ubermacht M3 (G80)","Ubermacht M3 (E46)","Ubermacht M4 (G82)","Ubermacht M4 (GTS)","Ubermacht M5 (E34)","Ubermacht M5 (E60)","Ubermacht M5 (CS)","Ubermacht M5 (CS) Halloween Edition","Ubermacht M8 (F91)","Ubermacht X5 (E70)","Ubermacht X5 (G05)","Ubermacht X6-M (E71)","Ubermacht X7 (G07)","V-STR","Vacca","Vagner","Vamos","Vectre","Velierer","Vigero","Virgo","Virgo Classic","Viseris","Visione","Voltic","Voodoo","Voodoo Custom","Warrener","Warrener HKR","Washington","Windsor","Windsor Drop","X80 Proto","XA-21","XLS","XLS (Armored)","Yosemite","Yosemite Rancher","Z-Type","Zentorno","Zion","Zion Cabrio","Zion Classic","Zorrusso","9F","9F Cabrio","car","motorcycle","helicopter","plane","boat"],
+notSellable:["Annis Concept 2021","Brabus Rocket G900","Benefactor-MG G63 (6X6)","Benefactor-Benz GLS 63","Benefactor-Benz MG Visione","Benefactor-Benz Vision AVTR","Benefactor-MG Project One","Benefactor-MG E63 (W213)","Benefactor-Maybach GLS600","Benefactor-MG GLE63 Coupe","Benefactor-MG A45 (W176)","Benefactor-MG CLS53 (C257)","Benefactor-Benz GLC300","Benefactor-Benz 300 SL (W198)","Benefactor-Benz 190E (Evolution II)","Benefactor-Maybach S63 (W223)","Bravado Charger Daytona","Enus EXP 10","Enus Wraith","Genesis G90","Grotti FXX-K Evo","Grotti Tributo (F8)","Grotti Stradale (SF90)","Grotti Superfast (F812)","Grotti Pista (F488)","Grotti Monza (SP2)","Gallivanter Evoque","KMTA Optima","Karin Corolla AE","Overflod Jesko 2020","Overflod CCX","Overflod One","Overflod Gemera","Overflod Regera","Obey TT","Obey RS5 Coupe","Obey RS E-Tron GT","Obey E-Tron Sportback","Ocelot Vulcan","Ocelot Evora","Ocelot GranTurismo","Pfister Cayenne","Pfister Panamera Turismo","Pfister 911 Turbo 2021","Pegassi Veneno (LP750)","Pegassi Centenario (LP770)","Pegassi Terzo","Pegassi Urus","Pegassi Diablo (SV)","Pegassi Aventador (LP700)","Pegassi Alston (SC18)","Pegassi Reventon","Pegassi Sian","Pegassi Countach (LP400)","Pegassi Countach (LPI 800-4)","Pegassi SE (PJ1)","Progen Elva","Progen P1","Progen 765 LT (Spider)","Shelby Cobra Daytona","Skoda Octavia RS","SSC Tuatara","Truffade Veyron","Truffade La Voiture Noire","Truffade Bolide","Truffade Divo","Ubermacht M5 (F90)","Ubermacht Z4 (E85)","Ubermacht Vision","Vapid Focus RS","Vapid GT 2017","Vapid Raptor F150","Vapid Mustang 1965","Vapid Mustang MACH-E"],
+bikes:["Akuma","Apocalypse Deathbike","Avarus","Bagger","Bati 801","Bati 801RR","BF-400","Blazer","Blazer Lifeguard","BMX","Carbon RS","Chimera","Cliffhanger","Cruiser","Daemon","Defiler","Diabolus","Diabolus Custom","Double-T","Enduro","Esskey","Faggio","FCR 1000","FCR 1000 Custom","Future Shock Deathbike","Gargoyle","Hakuchou","Hakuchou Drag","Hexer","Innovation","Lectro","Manchez","Nemesis","Nightblade","PCJ-600","Rat Bike","Ruffian","Sanchez","Sanctus","Shotaro","Sovereign","Street Blazer","Stryder","Thrust","Tri-Cycles Race Bike","Vader","Vindicator","Vortex","Whippet Race Bike","Wolfsbane","Zombie Chopper"],
+boats:["Dinghy","Dinghy (2-Seater)","Dinghy (Yacht)","Jetmax","Marquis","SeaShark","Speeder","Squalo","Suntrap","Toro","Tropic"],
+planes:["Alpha-Z1","Cuban 800","Dodo","Duster","Howard NX-25","Luxor","Luxor Deluxe","Mallard","Mammatus","Microlight","Nimbus","P-45 Nokota","V-65 Molotok","Velum"],
+helicopters:["Buzzard","Frogger","Maverick","Sparrow","SuperVolito Carbon","Swift Deluxe","Volatus"],
+privateBiz:["Ammunition Store","ATM business","Bar","Car wash","Car sharing","Chip tuning","Clothing shop","Electric station","Farm","Flower shop","Fight club","Furniture shop","Gas station","Grand Elite","Hair salon","Jewelry store","Juice shop","Luna park","Parking","Pet Shop","State object","Service station","Tattoo studio","Taxi company","Warehouse","24/7 Store","private business","Business Control","Gas station Control","Chip tuning Control","business"],
+familyBiz:["Burger shop","Cowshed","Freight train","Plantation","Oil Well","Pumpkin plantation","Cabbage plantation","Mandarin plantation","Pineapple plantation","family business"],
+bizShares:["Taxi fleet shares","Gas station shares","Chip tuning shares","Barber shop shares","Tattoo studio shares","Armory store shares","Bar shares","Car sharing shares"],
+maleTops:["Air Bior pullover sweater","black jacket with yellow trim","bomber jacket with glowing elements","branded insulated hoodie","branded longsleeve","branded T-shirt","bright hoodie","branded Molo T-shirt","Casual neon set","Casual neon torso","Chanel top","collection 2022 T-shirt","cropp collection T-shirt","denim jacket","fur coat without a hood","Glowing Bomber Set NEW Sample LW","Grand RP collection hoodie","Grand RP collection T-shirt","haliky hoodie","haliky T-shirt","Hoodie with Balaclava Cap X Yazzy","jacket with luminous trim","jacket with T-shirt","Lui Vi jacket","Lui Vi sweatshirt","Lui Vi full set","Lui Vi T-shirt","LM Playboy sweatshirt with luminous print","LM Playboy jacket with luminous print","LM Playboy T-shirt with luminous print","LM Playboy full set with luminous print","Lui Vi top","Mikachu hoodie","mix collection T-shirt","Muci hoodie","Muci hoodie with snake","Muci Not Fake hoodie","Muci sweatshirt","Niki new collection hoodie","Niki tech top","Niki track suit top","Off-White sweatshirt","Philip Plein T-shirt","scary turtleneck T-shirt","Social Club hoodie","Ston Islan Classic Sportswear","summer collection T-shirt","T-shirt of one-color CAP brand","The West Pace jacket","trendy jacket","TRON full set","TRON torso","Tsum collection T-shirt","vintage Abibas Olympic Jerseys","luminous jacket with turquoise trim","luminous T-shirt","UP-Green Sweatshirt","Wide printed football T-shirt","shirts","clothing"],
+malePants:["Abibas pants","Abibas sport pants","Abibas sweatpants","bright trousers","Bior pants","Grand RP collection pants","Muci pants","Muci trousers","Casual neon pants","Classic denim shorts","half-glowing pants","insulated personal pants","Lui Vi pants","luminous Fendi pants","luminous Grand RP trousers","LM Playboy pants with luminous print","luminous trousers","Leather gothic pants","new fashionable joggers","Niki new collection pants","Niki tech fleece pants","Niki track suit pants","neon pants","Neon Pants Set New Sample LW","summer voyage shorts","Shorts Lui Vi","TRON pants","pants","trousers","shorts"],
+maleShoes:["Abibas Marquee Boost Lows shoes","Abibas Pro Bounce 2019 Lows shoes","Abibas Pezy Boost 700 V3 Alvah shoes","Abibas Pezy Boost shoes","Acic Gel Kayano sneakers","Ground Mordan 4 Retro Laser 30th shoes","Muci branded flip-flops","Mordan 1 shoes","Mordan 6 shoes","luminous shoes","Off-White luminous Keezy Boost shoes","luminous Keezy Boost shoes","neon shoes","Niki Groundporce One new collection shoes","Niki Shox shoes","Niki Uptempo shoes","Niki Zoom Freak 1 Multi-Color shoes","Off-White Pezy Boost shoes","red sneakers","RGB neon shoes","Pans sneakers","Pezy Boost shoes","rare luminous shoes","Casual neon shoes","Balenciaga Track sneakers","TRON shoes","Alastor McQueen Oversized sneakers","shoes","sneakers"],
+femaleTops:["bandana top","collection 5 top","corset top","day dress","dress","faution top","jumpsuit","long brand T-shirt","low dress","pullover with long sleeve","short pullover","stylish suit","summer bra","top 2 outerwear","top Faution","top with chains","Watch Me sweater","winter collection dress"],
+femalePants:["Abibas leggings","Abibas pants","jeans","skirt with tights","Muci shorts","Custom Jeans"],
+femaleShoes:["tall boots","luminous shoes"],
+femaleDress:["luminous dress","Love costume","Spring set S23","Wedding dress"],
+masks:["alien with neon eyes mask","anime mask","bandana mask","baseball mask","Bigness mask","boxing helmet","carnival mask","Casual neon helmet","Christmas tree mask","clown mask","cowgirl hat","Cupids crown","Daft Punk mask","demon mask","desert scarf mask","LM Playboy mask with luminous print","Lui Vi desert scarf mask","devil mask","earphones with a heart","emoji mask","evil mask","exotic mask","fox mask","gorilla mask","Glowing face scarf mask","handkerchief mask","Jason blue mask","kitsune mask","luminous head bag mask","Sashmello mask","Munk mask","monkey boss mask","Nik mask","owl mask","panama hat","penguin mask","pig mask","purge mask","raccoon mask","raptor mask","raven mask","Razer headphones","red stocking mask","reindeer mask","robot human mask","robot mask","rooster mask","samurai mask","Santa Claus mask","shamanic mask","Saruko neon mask","skeleton king mask","snowboarders mask","snowflake glasses","snowman mask","sports mask","stealthy mask","tied scarf mask","tight mask","toothy mask","trending shark head hat","TRON helmet","TV-head mask","Satanic horns","toothy mask of type 1","toothy mask of type 2","tied scarf mask of type 1","masks","masks of type 2","masks of type 5"],
+accessories:["boxing gloves","chain around the body accessory","chain lost treasure neon accessory","Cyberpunk greatsword accessory","deer antler accessory","deer antlers with a red nose accessory","flying bear on the shoulder accessory","gloves","glowing snow glasses","Grand Chain","hearts Pride glasses","neck scarf accessory","pixel glasses","Satanic Wings","shiny deer antler headband accessory","snowflake glasses","Snake around the body accessory","wristband accessory","navel piercing accessory","rabbit ears"],
+watches:["Vasio G-Shock watch","Volex watch of type","Kolex watch of type","Volex watch","Kolex watch","watches"],
+backpacks:["Backpack from the Cubic Friend paired set skin","Backpack with piggy keychain skin","Branded Small backpack skin","Capsule backpack skin","Chain bag with spikes skin","Classic Lui Vui backpack skin","Cloud backpack skin","Cross backpack skin","Duffel Bag skin","Fur-lined bunny backpack","Gauard bag with Ladudu skin","Gingerbread house backpack skin","Gayardo shoulder bag skin","Grand backpack skin","Happy bear shoulder bag skin","HaHaHa set crossbody bag skin","Large LV crossbody bag skin","LUV backpack with wings skin","Luv Moscnino spiky heart backpack skin","LV backpack with water prints skin","LV crossbody bag skin","LW Crossbody Bag skin","Memo Bag Ladudu skin","Motosport Waist bag skin","Neon Chrome handbag skin","Scary chicken backpack skin","Skeleton cheetah plush backpack skin","Small shoulder bag LW skin","SSC Kit Bag skin","Sweet Sheep fur bag","backpack skin","backpack skins"],
+containers:["valuable container","valuable containers","desert scarf mask container","desert scarf mask containers","biker container","biker containers","Brand T-shirts 2 container","Brand shorts 2 container","trucker container","trucker containers","racer container","racer containers","Grand racers container","Grand racers containers","Ingrand container","Ingrand containers","Progen container","Progen containers","Maserati container","Maserati containers","Benefactor container","Benefactor containers","gardener container","gardener containers","rare love container","rare love containers","regular love container","regular love containers","Renault container","Renault containers","resources container","resources containers","diver container","diver containers","organization container","organization containers","sphere of influence container","wheels 1 container","wheels 2 container","wheels 3 container","wheels 1 containers","wheels 2 containers","wheels 3 containers","old autumn gold container","old summer gold container","old winter gold container","old autumn gold containers","old summer gold containers","old winter gold containers","School container","arena container","daily container","Halloween container","Halloween containers","womens gift container of type 1","womens gift container of type 2","males gift container of type 1","males gift container of type 2","blue womens top container of type 4","black womens top container of type 4","Benefactor E500 (W124) container","daily study of the organization container","Captured caravans container","Delivered caravans container","Valentine 2025 container","Valentine 2025 containers","case of delivered caravans container","drifter 2 container","containers"],
+shoulderPets:["six tailed fox on shoulder pet","hamster on shoulder pet","strong chicken on shoulder pet","owl on shoulder pet","flying bear on shoulder pet","toothless dragon on shoulder pet","leon brawl on shoulder pet","lovely bird egg on shoulder pet","Mr. Robot friend on shoulder pet","el primo corazon brawl on shoulder pet","black voron on shoulder pet"],
+cagedPets:["cage with a Border Collie","cage with a Cat","cage with a Cougar","cage with a Cyberdog","cage with a Husky","cage with a Panther","cage with a Pig","cage with a Poodle","cage with a Monkey","cage with a Pug","cage with a Christmas Elf","cage with a Santa Claus","cage with a Fancy bear","cage with a Cute Hippo","cage with a Mr Candy Cane","cage with a Futuristic Friend","cage with a New years Husky","cage with a Rabbit","cage with a Rat","cage with a Retriever","cage with a Robobeast","cage with a Rooster","cage with a Puma","cage with a Rottweiler","cage with a Westie","cage with a Kitty Bunny","cage with a Duckling","cage with a Panda","cage with a Lion Cub","cage with a Mini Robot","cage with a Cosmodog","cage with a Easter Bunny","cage with a pet","cage with a Dog"],
+items:["automatic drill","automatic drills","automatic sawmill","automatic sawmills","automatic rod","automatic rods","automatic oil well","automatic oil wells","automatic watering can","automatic watering cans","backpack skin","backpack skins","battery","batteries","Biospark","Biosparks","charger","chargers","Christmas key","Christmas keys","Christmas copper","Christmas timber","Christmas perch","Christmas seed","Christmas seeds","Christmas lollipop","Christmas lollipops","New years gift","New years gifts","Little gift","Little gifts","Big gift","Big gifts","Opened gift","Opened gifts","Drawing","Drawings","Dirty Statue","Dirty Statues","Purified Statue","Purified Statues","dice","fishing rod","fishing rods","firework","fireworks","fuel for resource extraction","Grand ticket","Grand tickets","GrandPro BodyCam","GrandPro BodyCams","hookah","hookahs","Leash","Leashes","letter","letters","license plate","license plates","custom license plate","custom license plates","regular lottery ticket","regular lottery tickets","rare lottery ticket","rare lottery tickets","flame and water lottery ticket","flame and water lottery tickets","Cayo Perico ticket","Cayo Perico tickets","Car ticket","Car tickets","Secret ticket fragment","Secret ticket fragments","Secret ticket","Secret tickets","Royal Artifacts lottery ticket","Royal Artifacts lottery tickets","luminous stone","luminous stones","milk","mushroom","mushrooms","paint can","paint cans","pearl","pearls","pet food","pet foods","pickaxe","pickaxes","Prime","Prime Platinum","repair kit","repair kits","Resource Miners ticket","Resource Miners tickets","sand","snow","solar panel","solar panels","SIM card","SIM cards","scrap metal","top quality metal","thread","threads","timber","token","tokens","tonic treat","tonic treats","Treasure Map","Treasure Maps","video card","video cards","wires","small inflatable mattress","small inflatable mattresses","large inflatable mattress","large inflatable mattresses","sponge","sponges","power booster shot","power booster shots","luminous wheels","fuel canister","fuel canisters","premium fuel canister","premium fuel canisters","solar barrel","solar barrels","gasoline barrel","gasoline barrels","kerosene barrel","kerosene barrels","letter G","letter R","letter A","letter N","letter D","GRAND letters","spatial sound effect","spatial sound effects","animated items","Fire Ring","Lightning Charge","Chick","inventory","low quality inventory","medium quality inventory","high quality inventory","max quality inventory","advanced quality inventory","low quality fishing rod","medium quality fishing rod","high quality fishing rod","max quality fishing rod","advanced quality fishing rod","low quality pickaxe","medium quality pickaxe","high quality pickaxe","max quality pickaxe","advanced quality pickaxe","tires tuning","brakes tuning","suspension tuning","transmission tuning","engine tuning","high quality tires tuning","medium quality tires tuning","low quality tires tuning","high quality brakes tuning","medium quality brakes tuning","low quality brakes tuning","high quality suspension tuning","medium quality suspension tuning","low quality suspension tuning","high quality transmission tuning","medium quality transmission tuning","low quality transmission tuning","high quality engine tuning","medium quality engine tuning","low quality engine tuning","tuning parts","high quality tuning parts","medium quality tuning parts","low quality tuning parts"],
+juices:["attack juice","attack juices","protection juice","protection juices","endurance juice","endurance juices","25% protection juice","riding juice","riding juices","power juice","power juices","immunity juice","immunity juices","fast running juice","fast running juices","juice on becoming an animal","juices on becoming an animal","juice for double the payment","juices for double the payment","10% attack juice","10% attack juices","20% attack juice","20% attack juices","10% protection juice","10% protection juices","20% protection juice","20% protection juices","juices"],
+fish:["perch","carp","salmon","trout","megalodon","ray","orca","humpback whale","fish"],
+fruits:["fruits","vegetables","fruits and vegetables","mandarin","mandarins","mandarin fruits","pumpkin","pumpkins","pumpkin fruits","strawberry","strawberries","strawberry fruits","pineapple","pineapples","pineapple fruits","cabbage","cabbages","cabbage vegetables"],
+seeds:["seeds","pineapple seed","pineapple seeds","cabbage seed","cabbage seeds","pumpkin seed","pumpkin seeds","mandarin seed","mandarin seeds","mushroom seed","mushroom seeds"],
+mining:["copper","emerald","emeralds","ruby","rubies","diamond","diamonds","obsidian","magma stone","magma stones","mining resources"],
+sounds:["Aghhhhh","Boowomp","Bonk","Bro","Brother eww","Cartoon tickle","Directed by","Duck","Faaah","Festive whistle","Goofy laugh","I love you","Kiss","Laughter","Mwahahaha","No no no no wait","Romantic","Sad violin","Skeleton hits a shield","Suspicious","Suspicious sound","Uwu","Vagabond","Whistle sound","Wooow","Yeah boy","Sad sound","Toy sound"],
+animated:["Chick","Fire Ring","Lightning Charge"],
+work:["workers","truckers","a trucker","a lawyer","a DJ","a photographer","a bodyguard","a professional dancer","a personal driver","an assistant","a professional singer","firefighters","a driver","a locksmith","an electrician","a gardener","a surveyor","construction site workers"],
+services:["24/7 Store owner","Clothing Shop owner","Ammunition Store owner","Gas Station owner","Car sharing owner","Business owner","Bar owner","Tattoo studio owner","Hair salon owner","Jewelry store owner","Pet Shop owner","Warehouse owner","Parking owner","Farm owner","Service station owner","Chip tuning owner","Taxi company owner","Electric station owner","Flower shop owner","Furniture shop owner","Juice shop owner","Luna park owner","Fight club owner","Car wash owner","ATM business owner","Grand Elite owner","State object owner"],
+parties:["Party at the beach","Party at the yacht","Party at Bahama Mamas Bar","Party at Tequi-la-la Bar","Party at Vanilla Unicorn Bar","Party at Hotel Spa Bar","Party at Diamond Resort Bar","Party at Raton Canyon","Party at Cayo Perico","Party at Stadium","Party at Arena","Party at house","Pool party at house","Wedding at Church","Car meet at","exclusive car meet"],
+locations:["Vinewood Hills","Rockford Hills","Richman","Sandy Shores","Paleto Bay","Mirror Park","Del Perro Beach","Del Perro Pier","the beach market","the beach","the city","the ghetto","Chumash","Auto Fair","Bahama Mamas Bar","Tequi-la-la Bar","FIB","SAHP","Hospital","Hotel","Hotel Spa Bar","Church","Stadium","Lifeinvader","Capitol","Fire Station","School","Postal","Pacific Bluffs Country Club","Diamond Resort Bar","Vanilla Unicorn Bar","Cayo Perico Island","Raton Canyon","Eclipse Towers","Tinsel Towers","Del Perro Heights","Richards Majestic","Tinkle Building","3 Alta Street","Celltowa Building"]
+};
+
+const SEARCH_INDEX = [];
+function addToIndex(items, cat, type) { items.forEach(i => SEARCH_INDEX.push({name:i, cat:cat, type:type})); }
+addToIndex(DB.realEstate,'🏠 Real Estate','realestate');
+addToIndex(DB.dating,'💕 Dating','dating');
+addToIndex(DB.vehicles,'🚗 Vehicle','auto');
+addToIndex(DB.notSellable,'🚫 Not Sellable','auto-ns');
+addToIndex(DB.bikes,'🏍️ Motorcycle','auto');
+addToIndex(DB.boats,'🚤 Boat','auto');
+addToIndex(DB.planes,'✈️ Plane','auto');
+addToIndex(DB.helicopters,'🚁 Helicopter','auto');
+addToIndex(DB.maleTops,'👔 Male Top','other');
+addToIndex(DB.malePants,'👖 Male Pants','other');
+addToIndex(DB.maleShoes,'👟 Male Shoes','other');
+addToIndex(DB.femaleTops,'👗 Female Top','other');
+addToIndex(DB.femalePants,'👖 Female Pants','other');
+addToIndex(DB.femaleShoes,'👠 Female Shoes','other');
+addToIndex(DB.femaleDress,'👗 Dress','other');
+addToIndex(DB.masks,'🎭 Mask','other');
+addToIndex(DB.accessories,'💎 Accessory','other');
+addToIndex(DB.watches,'⌚ Watch','other');
+addToIndex(DB.backpacks,'🎒 Backpack','other');
+addToIndex(DB.containers,'📦 Container','other');
+addToIndex(DB.shoulderPets,'🐾 Shoulder Pet','other');
+addToIndex(DB.cagedPets,'🐾 Caged Pet','other');
+addToIndex(DB.items,'🔧 Item','other');
+addToIndex(DB.juices,'🧃 Juice','other');
+addToIndex(DB.fish,'🐟 Fish','other');
+addToIndex(DB.fruits,'🍎 Fruit/Veg','other');
+addToIndex(DB.seeds,'🌱 Seed','other');
+addToIndex(DB.mining,'⛏️ Mining','other');
+addToIndex(DB.sounds,'🔊 Sound','other');
+addToIndex(DB.animated,'✨ Animated','other');
+addToIndex(DB.privateBiz,'🏢 Private Biz','business');
+addToIndex(DB.familyBiz,'👨‍👩‍👧 Family Biz','business');
+addToIndex(DB.bizShares,'📊 Biz Share','business');
+addToIndex(DB.work,'👷 Work','work');
+addToIndex(DB.services,'🔧 Services','services');
+addToIndex(DB.parties,'🎉 Party','other');
+addToIndex(DB.locations,'📍 Location','other');
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tabName).classList.add('active');
+    event.target.classList.add('active');
+    if (tabName === 'templates' && document.getElementById('templateGrid').children.length === 0) regenerateTemplates();
+}
+
+// ===== COLOR SELECT FUNCTION =====
+function onColorSelect() {
+    const selectedColor = document.getElementById('colorSelect').value;
+    if (selectedColor) {
+        document.getElementById('color').value = selectedColor;
+    }
+    buildAd();
+}
+
+function showSuggestions(q, targetId) {
+    if (!targetId) targetId = 'itemInput';
+    const box = document.getElementById('sugBox_' + targetId);
+    if (!box) return;
+    if (q.length < 2) { box.classList.remove('show'); return; }
+    const words = q.toLowerCase().trim().split(/\s+/).filter(w => w.length > 0);
+    let html = '', c = 0;
+    for (const item of SEARCH_INDEX) {
+        if (c >= 40) break;
+        const nameLower = item.name.toLowerCase();
+        const allMatch = words.every(w => nameLower.includes(w));
+        if (allMatch) {
+            const isVeh = item.type === 'auto' || item.type === 'auto-ns';
+            const display = isVeh ? `"${item.name}"` : item.name;
+            html += `<div class="sug-item" onclick="selectItemFor('${item.name.replace(/'/g,"\\'")}','${item.type}','${targetId}')">
+                <span class="sug-cat">${item.cat}</span>
+                <span class="sug-name">${display}</span></div>`;
+            c++;
+        }
+    }
+    if (!c) html = '<div class="sug-item"><span class="sug-cat">No results found</span></div>';
+    box.innerHTML = html;
+    box.classList.add('show');
+}
+
+function selectItemFor(name, type, targetId) {
+    const isVehicle = type === 'auto' || type === 'auto-ns';
+    const value = isVehicle ? `"${name}"` : name;
+    document.getElementById(targetId).value = value;
+    document.getElementById('sugBox_' + targetId).classList.remove('show');
+    if (targetId === 'itemInput') {
+        if (type === 'auto' || type === 'auto-ns') setCat('Auto');
+        else if (type === 'business') setCat('Business');
+        else if (type === 'realestate') setCat('Real Estate');
+        else if (type === 'dating') {
+            setCat('Dating');
+            if (!document.getElementById('action').value) {
+                document.getElementById('action').value = '';
+            }
+        }
+        else if (type === 'work') setCat('Work');
+        else if (type === 'services') setCat('Services');
+        else setCat('Other');
+        autoArticle(); 
+        autoPriceType();
+    }
+    buildAd();
+}
+
+function onActionChange() {
+    autoDetectCategory();
+    autoPriceType();
+    buildAd();
+}
+
+function autoDetectCategory() {
+    const action = document.getElementById('action').value;
+    if (['Hiring','Looking for a job','Looking to work as','DJ looking for work','Lawyer looking for work','Bodyguard looking for work'].includes(action)) setCat('Work');
+    else if (action === 'Looking for') setCat('Dating');
+    else if (['Party at','Pool party at','Wedding at','Car meet at'].some(a => action.startsWith(a))) setCat('Other');
+}
+
+function autoPriceType() {
+    const action = document.getElementById('action').value;
+    const pt = document.getElementById('priceType');
+    const hint = document.getElementById('priceHint');
+    if (action === 'Selling' || action === 'Selling or trading') { 
+        pt.value = 'Price'; 
+        hint.textContent = '✓ Auto: Price'; 
+        hint.style.color = '#ff9999';
+    }
+    else if (action === 'Buying' || action === 'Renting') { 
+        pt.value = 'Budget'; 
+        hint.textContent = '✓ Auto: Budget'; 
+        hint.style.color = '#ff9999';
+    }
+    else if (['Hiring','Looking to work as'].includes(action)) { 
+        pt.value = 'Salary'; 
+        hint.textContent = '✓ Auto: Salary'; 
+        hint.style.color = '#ff9999';
+    }
+    else if (action === 'Renting out') { 
+        pt.value = 'Rent'; 
+        hint.textContent = '✓ Auto: Rent'; 
+        hint.style.color = '#ff9999';
+    }
+    else if (action === 'Looking to play') { 
+        pt.value = 'Bet'; 
+        hint.textContent = '✓ Auto: Bet'; 
+        hint.style.color = '#ff9999';
+    }
+    else if (action === 'Trading') { 
+        pt.value = ''; 
+        hint.textContent = 'No price (Trading)'; 
+        hint.style.color = '#997777';
+    }
+    else { 
+        hint.textContent = 'Select action to auto-detect'; 
+        hint.style.color = '#997777';
+    }
+}
+
+function setCat(cat) { document.getElementById('adCategory').value = cat; }
+
+const AN_STARTS = ['apartment','automatic','emerald','organization','old','opened','oil','atm','ammunition','arena'];
+const NO_ARTICLE = ['wires','dice','milk','sand','snow','timber','copper','obsidian','pet food','seeds','shirts','shoes','clothing','pants','trousers','shorts','letters','sim cards','stones','panels','fruits','vegetables','tickets','containers','skins','wheels','plates','masks','pets','juices','tunings','barrels','canisters','batteries','chargers','maps','rods','drills','sawmills','fireworks','statues','drawings','lollipops','gifts','tokens','pearls','pickaxes','mushrooms','sponges','threads','shots','shares','pumpkins','mandarins','strawberries','pineapples','cabbages','diamonds','rubies','emeralds','salmon','carp','perch','trout','looking for','apartments','houses','sneakers','watches','fish','mattresses','statues','tickets','fragments','biosparks','keys','plates','wells','rods','drills','sawmills','shots','hookahs','leashes','stones','tokens','tuning'];
+
+function autoArticle() {
+    const qty = document.getElementById('qty').value;
+    const propNum = document.getElementById('propNum').value.trim();
+    let item = document.getElementById('itemInput').value.trim();
+    const art = document.getElementById('article');
+    if (propNum) { art.value = ''; return; }
+    if (qty || !item) { art.value = ''; return; }
+    const lower = item.toLowerCase().replace(/^"/, '').replace(/"$/, '');
+    if (item.startsWith('"')) { art.value = ''; return; }
+    if (lower.startsWith('looking for')) { art.value = ''; return; }
+    for (const na of NO_ARTICLE) if (lower.includes(na)) { art.value = ''; return; }
+    const needsArticle = ['house','apartment','mansion','car','motorcycle','helicopter','plane','boat','business','drill','sawmill','rod','well','ticket','canister','battery','charger','hookah','firework','pickaxe','pearl','mushroom','sponge','token','thread','inventory','container','stone','mattress','cage','biospark','leash','map','bodycam','ring','coin','statue','drawing','gift','lollipop','skin','plate','fragment','kit','license','key','copper','timber','perch'];
+    let needs = false;
+    for (const n of needsArticle) if (lower.startsWith(n) || lower.includes(' ' + n)) { needs = true; break; }
+    if (!needs) { art.value = ''; return; }
+    let useAn = /^[aeiou]/i.test(lower);
+    for (const w of AN_STARTS) if (lower.startsWith(w)) { useAn = true; break; }
+    art.value = useAn ? 'an' : 'a';
+}
+
+function detectCategoryFromItem(item) {
+    if (!item) return '';
+    const l = item.toLowerCase().replace(/"/g, '');
+    if (l.startsWith('looking for')) return 'Dating';
+    if (l.includes('house') || l.includes('apartment') || l.includes('mansion') || l.includes('casino penthouse')) return 'Real Estate';
+    for (const v of [...DB.vehicles,...DB.notSellable,...DB.bikes,...DB.boats,...DB.planes,...DB.helicopters]) if (l === v.toLowerCase()) return 'Auto';
+    if ((l === 'car' || l === 'a car') && !l.includes('car ticket') && !l.includes('car sharing') && !l.includes('car wash')) return 'Auto';
+    if (['motorcycle','helicopter','plane','boat','a motorcycle','a helicopter','a plane','a boat'].includes(l)) return 'Auto';
+    for (const b of [...DB.privateBiz,...DB.familyBiz]) if (l.includes(b.toLowerCase())) return 'Business';
+    for (const s of DB.bizShares) if (l.includes(s.toLowerCase())) return 'Business';
+    if (l.includes('business') || l.includes('control')) return 'Business';
+    if (['worker','trucker','lawyer','dancer','singer','bodyguard','driver','assistant','firefighter','photographer','gardener','electrician','locksmith','surveyor'].some(w => l.includes(w))) return 'Work';
+    return 'Other';
+}
+
+function buildAd() {
+    const g = id => document.getElementById(id).value.trim();
+    const c = id => document.getElementById(id).checked;
+    const action = g('action'), qty = g('qty'), article = g('article'), item = g('itemInput');
+    const propNum = g('propNum'), color = g('color'), typeNum = g('typeNum'), gender = g('gender');
+    const quality = g('quality'), extra = g('extra'), item2 = g('item2'), item3 = g('item3');
+    const priceType = g('priceType'), priceAmt = g('priceAmt'), priceUnit = g('priceUnit'), priceSfx = g('priceSfx');
+    const price2 = g('price2'), price3 = g('price3'), days = g('days'), loc = g('loc');
+    let cat = g('adCategory');
+    
+    if (['DJ looking for work','Lawyer looking for work','Bodyguard looking for work','Looking for a job'].includes(action)) {
+        let ad = action + '.';
+        if (!cat) cat = 'Work';
+        showResult(ad, cat);
+        return;
+    }
+
+    let vf = [];
+    if (c('fFullCfg')) vf.push('full configuration');
+    if (c('fPartCfg')) vf.push('partial configuration');
+    if (c('fVisual')) vf.push('visual upgrades');
+    if (c('fLumW')) { const wt = g('wheelT'); vf.push(wt ? 'luminous wheels of type '+wt : 'luminous wheels'); }
+    if (c('fIns')) vf.push('insurance');
+    if (c('fTurbo')) vf.push('turbo kit');
+    if (c('fDrift')) vf.push('drift kit');
+
+    let rf = [];
+    if (c('rGarden')) rf.push('a garden');
+    const gs = g('rGS'); if (gs) rf.push(gs+' g.s.');
+    const wh = g('rWH'); if (wh) rf.push(wh+' w.h.');
+    if (c('rInterior')) rf.push('custom interior');
+    if (c('rIns')) rf.push('insurance');
+    if (c('rHeli')) rf.push('helipad');
+    if (c('rPool')) rf.push('swimming pool');
+    if (c('rTennis')) rf.push('tennis court');
+    if (c('rDrive')) rf.push('long driveway');
+    if (c('rBack')) rf.push('spacious backyard');
+    if (c('rViews')) rf.push('nice views');
+
+    let parts = [];
+    const itemLower = item.toLowerCase();
+    if (itemLower.startsWith('looking for')) {
+    } else if (action) {
+        parts.push(action);
+    }
+    if (qty) parts.push(qty);
+    if (!qty && !propNum && article) parts.push(article);
+    if (color) parts.push(color.toLowerCase());
+    if (quality) parts.push(quality);
+    let itemStr = item;
+    if (propNum) itemStr = itemStr ? itemStr + ' №' + propNum : '№' + propNum;
+    if (itemStr) parts.push(itemStr);
+    if (days && days.startsWith('with')) parts.push(days);
+    let features = vf.length > 0 ? vf : rf;
+    if (features.length > 0) parts.push('with ' + fmtList(features));
+    if (typeNum) parts.push('of type ' + typeNum);
+    if (gender) parts.push(gender);
+    
+    if (item2 && item3) { 
+        const lp = parts[parts.length-1]; 
+        parts[parts.length-1] = lp + ','; 
+        parts.push(item2); 
+        parts.push('and'); 
+        parts.push(item3); 
+    }
+    else if (item2) { 
+        parts.push('and'); 
+        parts.push(item2); 
+    }
+    
+    if (extra) parts.push(extra);
+    if (loc) parts.push(loc);
+    let ad = parts.filter(p => p && p.length > 0).join(' ');
+    ad = ad.replace(/\s+/g, ' ').replace(/\s+,/g, ',').trim();
+
+    if (priceType) {
+        if (priceAmt) {
+            let mainPrice = '$' + priceAmt;
+            if (priceUnit) mainPrice += ' ' + priceUnit;
+            let priceStr;
+            if (price2 && price3) {
+                priceStr = priceType + ': ' + mainPrice + ', ' + price2 + ' and ' + price3;
+                if (priceSfx) priceStr += ' ' + priceSfx;
+            } else if (price2) {
+                priceStr = priceType + ': ' + mainPrice + ' and ' + price2;
+                if (priceSfx) priceStr += ' ' + priceSfx;
+            } else {
+                priceStr = priceType + ': ' + mainPrice;
+                if (priceSfx) priceStr += ' ' + priceSfx;
+            }
+            ad += '. ' + priceStr;
+        } else {
+            ad += '. ' + priceType + ': Negotiable';
+        }
+    }
+    
+    if (days && days.startsWith('for') && priceAmt) ad += ' ' + days;
+    if (!cat && item) { cat = detectCategoryFromItem(item); if (cat) document.getElementById('adCategory').value = cat; }
+    if (ad) { const lc = ad.charAt(ad.length - 1); if (lc !== '.' && lc !== ')') if (!/\d$/.test(ad)) ad += '.'; }
+    showResult(ad, cat);
+}
+
+function fmtList(arr) {
+    if (arr.length <= 1) return arr.join('');
+    if (arr.length === 2) return arr[0] + ' and ' + arr[1];
+    return arr.slice(0,-1).join(', ') + ' and ' + arr[arr.length-1];
+}
+
+function showResult(ad, cat) {
+    const out = document.getElementById('output');
+    const badge = document.getElementById('catBadge');
+    if (!ad || ad.trim() === '') { out.textContent = 'Build your ad below...'; out.classList.add('empty'); badge.innerHTML = ''; return; }
+    let finalText = ad;
+    if (cat) finalText += ' (' + cat + ')';
+    out.textContent = finalText;
+    out.classList.remove('empty');
+    if (cat) {
+        const cls = {'Real Estate':'cat-re','Auto':'cat-auto','Business':'cat-biz','Discounts':'cat-disc','Work':'cat-work','Dating':'cat-date','Services':'cat-serv','Other':'cat-other'};
+        badge.innerHTML = `<span class="cat-badge ${cls[cat]||'cat-other'}">${cat}</span>`;
+    } else badge.innerHTML = '';
+}
+
+function copyOutput() {
+    const text = document.getElementById('output').textContent;
+    if (text && text !== 'Build your ad below...') {
+        const cleanText = text.replace(/\s*\([^)]*\)\s*$/, '').trim();
+        navigator.clipboard.writeText(cleanText);
+        showToast('COPIED!');
+    }
+}
+
+function clearAll() {
+    document.querySelectorAll('#tab-builder select').forEach(s => s.selectedIndex = 0);
+    document.querySelectorAll('#tab-builder input[type="text"]').forEach(i => i.value = '');
+    document.querySelectorAll('#tab-builder input[type="checkbox"]').forEach(c => c.checked = false);
+    document.getElementById('output').textContent = 'Build your ad below...';
+    document.getElementById('output').classList.add('empty');
+    document.getElementById('catBadge').innerHTML = '';
+    document.getElementById('priceHint').textContent = 'Select action to auto-detect';
+    document.getElementById('priceHint').style.color = '#997777';
+}
+
+let TEMPLATES = [];
+
+function formatPrice(v) {
+    if (!v) return "Negotiable";
+    let s = String(v).replace("$","").trim();
+    if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g,"");
+    else s = s.replace(/,/g,"");
+    if (s.toLowerCase() === "negotiable") return "Negotiable";
+    if (isNaN(Number(s))) return s;
+    const n = parseFloat(s);
+    if (n >= 1000000) { const m = n/1000000; return m % 1 === 0 ? "$" + m + " Million" : "$" + m.toFixed(1).replace(/\.0$/,"") + " Million"; }
+    return "$" + n.toLocaleString("de-DE");
+}
+
+function rand(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function joinList(arr) { return arr.length === 1 ? arr[0] : arr.slice(0,-1).join(", ") + " and " + arr[arr.length-1]; }
+
+function priceStr(type, mode, custom, suffix) {
+    const sfx = suffix === "each" ? " each" : suffix === "each_respectively" ? " each respectively" : "";
+    if (mode === "custom" && custom) return `${type}: ${formatPrice(custom)}${sfx}.`;
+    if (mode === "mixed") {
+        const prices = [500000, 900000, 1200000, 1500000, 2500000, 4500000, 10000000, 30000000];
+        if (Math.random() > 0.5) return `${type}: ${formatPrice(pick(prices))}${sfx}.`;
+    }
+    return `${type}: Negotiable${sfx}.`;
+}
+
+function generateTemplates() {
+    const mode = document.getElementById('priceMode').value;
+    const custom = document.getElementById('customPriceAmt').value;
+    const sfx = document.getElementById('priceSuffixMode').value;
+    const tpl = [];
+    const gs = ["2 g.s.","5 g.s.","9 g.s.","25 g.s.","30 g.s."];
+    const wh = ["3 w.h.","4 w.h.","5 w.h."];
+    const locs = ["Vinewood Hills","Rockford Hills","Richman","Sandy Shores","Paleto Bay","Mirror Park","Del Perro Beach","the beach market","the beach","the city"];
+
+    for (let i = 0; i < 60; i++) {
+        const f = [];
+        if (Math.random() > 0.3) f.push("a garden");
+        if (Math.random() > 0.3) f.push(pick(gs));
+        if (Math.random() > 0.65) f.push(pick(wh));
+        if (Math.random() > 0.55) f.push("insurance");
+        if (Math.random() > 0.6) f.push("swimming pool");
+        if (Math.random() > 0.5) f.push("nice views");
+        let a = `Selling house №${rand(1,2000)}`;
+        if (f.length) a += ` with ${joinList(f)}`;
+        a += ` in ${pick(locs)}. ${priceStr("Price",mode,custom,sfx)}`;
+        tpl.push({category:"realestate", text:a});
+        tpl.push({category:"realestate", text:`Buying a house in ${pick(locs)}. ${priceStr("Budget",mode,custom,sfx)}`});
+    }
+    tpl.push({category:"realestate", text:`Selling a house. ${priceStr("Price",mode,custom,sfx)}`});
+    tpl.push({category:"realestate", text:`Selling an apartment. ${priceStr("Price",mode,custom,sfx)}`});
+    tpl.push({category:"realestate", text:`Selling Casino penthouse. ${priceStr("Price",mode,custom,sfx)}`});
+    tpl.push({category:"realestate", text:`Selling a mansion. ${priceStr("Price",mode,custom,sfx)}`});
+    for (let i = 0; i < 30; i++) {
+        tpl.push({category:"realestate", text:`Selling apartment №${rand(100,2000)} in ${pick(locs)}. ${priceStr("Price",mode,custom,sfx)}`});
+    }
+
+    const cfg = [""," with full configuration"," with partial configuration"," with visual upgrades"," with full configuration and visual upgrades"," with full configuration, visual upgrades, insurance, turbo kit and drift kit"];
+    [...DB.vehicles,...DB.bikes,...DB.boats,...DB.planes,...DB.helicopters].forEach(v => {
+        tpl.push({category:"auto", text:`Selling "${v}". ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"auto", text:`Buying "${v}". ${priceStr("Budget",mode,custom,sfx)}`});
+        const c = pick(cfg);
+        if (c) tpl.push({category:"auto", text:`Selling "${v}"${c}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"auto", text:`Renting out "${v}". Rent: ${formatPrice(mode==="custom"&&custom?custom:100000)} per week.`});
+    });
+
+    DB.privateBiz.forEach(b => {
+        const name = /business$/i.test(b) ? b : `${b} business`;
+        tpl.push({category:"business", text:`Selling ${name}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Buying ${name}. ${priceStr("Budget",mode,custom,sfx)}`});
+        for (let i = 0; i < 3; i++) tpl.push({category:"business", text:`Selling ${b.replace(/\s+business$/i,'')} №${rand(1,200)}. ${priceStr("Price",mode,custom,sfx)}`});
+    });
+    DB.familyBiz.forEach(b => {
+        tpl.push({category:"business", text:`Selling ${b} business. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Buying ${b} business. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.bizShares.forEach(s => {
+        tpl.push({category:"business", text:`Selling ${s}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Buying ${s}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+
+    const clothing = [...DB.maleTops,...DB.malePants,...DB.maleShoes,...DB.masks,...DB.femaleTops,...DB.femalePants,...DB.femaleShoes,...DB.femaleDress,...DB.accessories];
+    const colors = ["","black","white","red","blue","green","yellow","purple","pink"];
+    const genders = ["","for men","for women"];
+    clothing.forEach(c => {
+        const col = pick(colors);
+        const gnd = pick(genders);
+        const name = `${col?col+' ':''}${c}${gnd?' '+gnd:''}`;
+        tpl.push({category:"clothing", text:`Selling ${name}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"clothing", text:`Buying ${name}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+
+    DB.items.forEach(i => {
+        tpl.push({category:"other", text:`Selling ${i}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${i}. ${priceStr("Budget",mode,custom,sfx)}`});
+        const qty = pick([2,5,10,20,50,100,500,1000]);
+        tpl.push({category:"other", text:`Selling ${qty} ${i}. ${priceStr("Price",mode,custom,sfx)}`});
+    });
+    DB.juices.forEach(j => {
+        tpl.push({category:"other", text:`Selling ${j}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${j}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.cagedPets.forEach(p => {
+        tpl.push({category:"other", text:`Selling ${p}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${p}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.shoulderPets.forEach(p => {
+        tpl.push({category:"other", text:`Selling ${p}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${p}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.containers.forEach(c => {
+        tpl.push({category:"other", text:`Selling ${c}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${c}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.fruits.forEach(f => {
+        tpl.push({category:"other", text:`Selling ${f}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"other", text:`Buying ${f}. ${priceStr("Budget",mode,custom,sfx)}`});
+    });
+    DB.parties.forEach(p => tpl.push({category:"other", text:`${p}.`}));
+    DB.services.forEach(s => tpl.push({category:"other", text:`Looking for a ${s}.`}));
+
+    ["workers","truckers","a trucker","a lawyer","a DJ","a photographer","a bodyguard","a professional dancer","a personal driver","an assistant","a professional singer","firefighters","a driver"].forEach(w => {
+        tpl.push({category:"work", text:`Hiring ${w}. ${priceStr("Salary",mode,custom,sfx)}`});
+        tpl.push({category:"work", text:`${w.charAt(0).toUpperCase()+w.slice(1)} looking for work.`});
+    });
+    tpl.push({category:"work", text:`Hiring workers at construction site №1 on Vespucci Boulevard. ${priceStr("Salary",mode,custom,sfx)}`});
+    tpl.push({category:"work", text:`Hiring workers at construction site №2 on Calais Avenue. ${priceStr("Salary",mode,custom,sfx)}`});
+    tpl.push({category:"work", text:`Hiring workers at construction site №3 in Pillbox Hill. ${priceStr("Salary",mode,custom,sfx)}`});
+    tpl.push({category:"work", text:"Looking for a job."});
+
+    DB.dating.forEach(d => tpl.push({category:"dating", text:`${d}.`}));
+
+    return tpl;
+}
+
+const CAT_LABELS = {realestate:"🏠 Real Estate",auto:"🚗 Auto",business:"💼 Business",clothing:"👕 Clothing",other:"📦 Other",work:"👷 Work",dating:"💕 Dating"};
+
+function regenerateTemplates() {
+    TEMPLATES = generateTemplates();
+    renderTemplates();
+}
+
+function renderTemplates() {
+    const cat = document.getElementById('filterCategory').value;
+    const act = document.getElementById('filterAction').value;
+    const searchQuery = document.getElementById('searchTemplates').value.toLowerCase().trim();
+    const searchWords = searchQuery.split(/\s+/).filter(w => w.length > 0);
+    const filtered = TEMPLATES.filter(t => {
+        if (cat !== 'all' && t.category !== cat) return false;
+        if (act !== 'all' && !t.text.startsWith(act)) return false;
+        if (searchWords.length > 0) {
+            const textLower = t.text.toLowerCase();
+            if (!searchWords.every(w => textLower.includes(w))) return false;
+        }
+        return true;
+    });
+    document.getElementById('statCount').textContent = filtered.length + ' ADS';
+    const grouped = {};
+    filtered.forEach(t => { if (!grouped[t.category]) grouped[t.category] = []; grouped[t.category].push(t.text); });
+    const grid = document.getElementById('templateGrid');
+    let html = '';
+    Object.keys(grouped).forEach(c => {
+        const items = grouped[c];
+        const shown = items.slice(0, 100);
+        html += `<div class="category-card">
+            <div class="category-header">
+                <span>${CAT_LABELS[c] || c}</span>
+                <span class="category-count">${items.length}</span>
+            </div>
+            <div class="ads-list">`;
+        shown.forEach((t, i) => {
+            html += `<div class="ad-item" onclick="copyAd(this, '${t.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">${t}</div>`;
+        });
+        if (items.length > 100) html += `<div class="show-more-btn">▼ ${items.length - 100} MORE HIDDEN — Use filters to narrow</div>`;
+        html += `</div></div>`;
+    });
+    grid.innerHTML = html || '<div class="panel" style="grid-column:1/-1;text-align:center;color:#c49f9f">No ads match your filters</div>';
+}
+
+function copyAd(el, text) {
+    navigator.clipboard.writeText(text.replace(/&quot;/g,'"'));
+    document.querySelectorAll('.ad-item.copied').forEach(e => e.classList.remove('copied'));
+    el.classList.add('copied');
+    showToast('COPIED!');
+    setTimeout(() => el.classList.remove('copied'), 2000);
+}
+
+function copyAllVisible() {
+    const items = document.querySelectorAll('#templateGrid .ad-item');
+    const texts = [];
+    items.forEach(i => texts.push(i.textContent));
+    navigator.clipboard.writeText(texts.join('\n'));
+    showToast('ALL COPIED!');
+}
+
+function searchDB(q) {
+    const res = document.getElementById('dbResults');
+    if (q.length < 2) { res.innerHTML = ''; return; }
+    const words = q.toLowerCase().trim().split(/\s+/).filter(w => w.length > 0);
+    let html = '', c = 0;
+    for (const item of SEARCH_INDEX) {
+        if (c >= 50) break;
+        const nameLower = item.name.toLowerCase();
+        if (words.every(w => nameLower.includes(w))) {
+            const isV = item.type === 'auto' || item.type === 'auto-ns';
+            const d = isV ? `"${item.name}"` : item.name;
+            html += `<div class="sug-item" onclick="cpy('${item.name.replace(/'/g,"\\'")}')">
+                <span class="sug-cat">${item.cat}</span>
+                <span class="sug-name">${d}</span></div>`;
+            c++;
+        }
+    }
+    if (!c) html = '<div class="sug-item">No results found</div>';
+    res.innerHTML = html;
+}
+
+function cpy(text) { navigator.clipboard.writeText(text); showToast('COPIED!'); }
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '✅ ' + msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+document.addEventListener('click', e => {
+    if (!e.target.closest('.suggest-wrap')) {
+        document.querySelectorAll('.suggestions').forEach(s => s.classList.remove('show'));
+    }
+});
+</script>
+
+</body>
+</html>
