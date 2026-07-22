@@ -440,22 +440,12 @@ select option { background: #180d0d; color: #fff; }
     text-align: center;
 }
 
-/* COLOR DROPDOWN STYLING */
 .color-select-wrap {
     display: flex;
     gap: 6px;
     align-items: stretch;
 }
-.color-select-wrap select {
-    flex: 1;
-}
-.color-swatch {
-    width: 40px;
-    height: auto;
-    border: 1px solid rgba(255,50,50,0.35);
-    border-radius: 8px;
-    display: inline-block;
-}
+.color-select-wrap select { flex: 1; }
 
 .credit-footer {
     text-align: center;
@@ -572,7 +562,7 @@ select option { background: #180d0d; color: #fff; }
 
             <label>Item / Vehicle / Person Name (Multi-word search — e.g. "black lui vi jacket")</label>
             <div class="suggest-wrap">
-                <input type="text" id="itemInput" placeholder="Type keywords... e.g. house, apartment, looking for wife, black lui vi" oninput="showSuggestions(this.value, 'itemInput');autoArticle();buildAd()" onfocus="showSuggestions(this.value, 'itemInput')" autocomplete="off">
+                <input type="text" id="itemInput" placeholder="Type keywords... e.g. house, apartment, cowshed, black lui vi" oninput="showSuggestions(this.value, 'itemInput');autoArticle();buildAd()" onfocus="showSuggestions(this.value, 'itemInput')" autocomplete="off">
                 <div class="suggestions" id="sugBox_itemInput"></div>
             </div>
 
@@ -583,86 +573,84 @@ select option { background: #180d0d; color: #fff; }
                 </div>
                 <div>
                     <label>🎨 Color (Select or Type)</label>
-                    <div class="color-select-wrap">
-                        <select id="colorSelect" onchange="onColorSelect()" style="flex:1">
-                            <option value="">-- Select Color --</option>
-                            <optgroup label="🖤 Basic Colors">
-                                <option value="black">⚫ black</option>
-                                <option value="white">⚪ white</option>
-                                <option value="gray">🩶 gray</option>
-                                <option value="grey">🩶 grey</option>
-                                <option value="brown">🟤 brown</option>
-                                <option value="beige">🟨 beige</option>
-                            </optgroup>
-                            <optgroup label="🔴 Red Family">
-                                <option value="red">🔴 red</option>
-                                <option value="dark red">🟥 dark red</option>
-                                <option value="pink">🩷 pink</option>
-                                <option value="light pink">🩷 light pink</option>
-                                <option value="hot pink">🩷 hot pink</option>
-                                <option value="magenta">💗 magenta</option>
-                                <option value="maroon">🟥 maroon</option>
-                                <option value="crimson">🔴 crimson</option>
-                                <option value="coral">🟠 coral</option>
-                                <option value="salmon">🐟 salmon</option>
-                            </optgroup>
-                            <optgroup label="🟠 Orange Family">
-                                <option value="orange">🟠 orange</option>
-                                <option value="dark orange">🟧 dark orange</option>
-                                <option value="light orange">🟧 light orange</option>
-                            </optgroup>
-                            <optgroup label="🟡 Yellow Family">
-                                <option value="yellow">🟡 yellow</option>
-                                <option value="light yellow">🟨 light yellow</option>
-                                <option value="dark yellow">🟨 dark yellow</option>
-                                <option value="gold">🟡 gold</option>
-                                <option value="golden">🟡 golden</option>
-                            </optgroup>
-                            <optgroup label="🟢 Green Family">
-                                <option value="green">🟢 green</option>
-                                <option value="dark green">🟩 dark green</option>
-                                <option value="light green">🟢 light green</option>
-                                <option value="lime">🟢 lime</option>
-                                <option value="olive">🫒 olive</option>
-                                <option value="mint">🌿 mint</option>
-                                <option value="turquoise">💚 turquoise</option>
-                                <option value="teal">🩵 teal</option>
-                                <option value="neon green">💚 neon green</option>
-                            </optgroup>
-                            <optgroup label="🔵 Blue Family">
-                                <option value="blue">🔵 blue</option>
-                                <option value="dark blue">🟦 dark blue</option>
-                                <option value="light blue">🩵 light blue</option>
-                                <option value="sky blue">🩵 sky blue</option>
-                                <option value="navy">🟦 navy</option>
-                                <option value="navy blue">🟦 navy blue</option>
-                                <option value="royal blue">🔵 royal blue</option>
-                                <option value="cyan">🩵 cyan</option>
-                                <option value="aqua">🩵 aqua</option>
-                            </optgroup>
-                            <optgroup label="🟣 Purple Family">
-                                <option value="purple">🟣 purple</option>
-                                <option value="dark purple">🟪 dark purple</option>
-                                <option value="light purple">🟪 light purple</option>
-                                <option value="violet">🟣 violet</option>
-                                <option value="lavender">💜 lavender</option>
-                                <option value="indigo">🟣 indigo</option>
-                            </optgroup>
-                            <optgroup label="✨ Special">
-                                <option value="silver">⚪ silver</option>
-                                <option value="rainbow">🌈 rainbow</option>
-                                <option value="multi-colored">🌈 multi-colored</option>
-                                <option value="colorful">🌈 colorful</option>
-                                <option value="neon">💡 neon</option>
-                                <option value="fluorescent">💡 fluorescent</option>
-                                <option value="transparent">◻️ transparent</option>
-                                <option value="luminous">✨ luminous</option>
-                                <option value="glowing">✨ glowing</option>
-                                <option value="metallic">🔗 metallic</option>
-                                <option value="chrome">🔗 chrome</option>
-                            </optgroup>
-                        </select>
-                    </div>
+                    <select id="colorSelect" onchange="onColorSelect()">
+                        <option value="">-- Select Color --</option>
+                        <optgroup label="🖤 Basic Colors">
+                            <option value="black">⚫ black</option>
+                            <option value="white">⚪ white</option>
+                            <option value="gray">🩶 gray</option>
+                            <option value="grey">🩶 grey</option>
+                            <option value="brown">🟤 brown</option>
+                            <option value="beige">🟨 beige</option>
+                        </optgroup>
+                        <optgroup label="🔴 Red Family">
+                            <option value="red">🔴 red</option>
+                            <option value="dark red">🟥 dark red</option>
+                            <option value="pink">🩷 pink</option>
+                            <option value="light pink">🩷 light pink</option>
+                            <option value="hot pink">🩷 hot pink</option>
+                            <option value="magenta">💗 magenta</option>
+                            <option value="maroon">🟥 maroon</option>
+                            <option value="crimson">🔴 crimson</option>
+                            <option value="coral">🟠 coral</option>
+                            <option value="salmon">🐟 salmon</option>
+                        </optgroup>
+                        <optgroup label="🟠 Orange Family">
+                            <option value="orange">🟠 orange</option>
+                            <option value="dark orange">🟧 dark orange</option>
+                            <option value="light orange">🟧 light orange</option>
+                        </optgroup>
+                        <optgroup label="🟡 Yellow Family">
+                            <option value="yellow">🟡 yellow</option>
+                            <option value="light yellow">🟨 light yellow</option>
+                            <option value="dark yellow">🟨 dark yellow</option>
+                            <option value="gold">🟡 gold</option>
+                            <option value="golden">🟡 golden</option>
+                        </optgroup>
+                        <optgroup label="🟢 Green Family">
+                            <option value="green">🟢 green</option>
+                            <option value="dark green">🟩 dark green</option>
+                            <option value="light green">🟢 light green</option>
+                            <option value="lime">🟢 lime</option>
+                            <option value="olive">🫒 olive</option>
+                            <option value="mint">🌿 mint</option>
+                            <option value="turquoise">💚 turquoise</option>
+                            <option value="teal">🩵 teal</option>
+                            <option value="neon green">💚 neon green</option>
+                        </optgroup>
+                        <optgroup label="🔵 Blue Family">
+                            <option value="blue">🔵 blue</option>
+                            <option value="dark blue">🟦 dark blue</option>
+                            <option value="light blue">🩵 light blue</option>
+                            <option value="sky blue">🩵 sky blue</option>
+                            <option value="navy">🟦 navy</option>
+                            <option value="navy blue">🟦 navy blue</option>
+                            <option value="royal blue">🔵 royal blue</option>
+                            <option value="cyan">🩵 cyan</option>
+                            <option value="aqua">🩵 aqua</option>
+                        </optgroup>
+                        <optgroup label="🟣 Purple Family">
+                            <option value="purple">🟣 purple</option>
+                            <option value="dark purple">🟪 dark purple</option>
+                            <option value="light purple">🟪 light purple</option>
+                            <option value="violet">🟣 violet</option>
+                            <option value="lavender">💜 lavender</option>
+                            <option value="indigo">🟣 indigo</option>
+                        </optgroup>
+                        <optgroup label="✨ Special">
+                            <option value="silver">⚪ silver</option>
+                            <option value="rainbow">🌈 rainbow</option>
+                            <option value="multi-colored">🌈 multi-colored</option>
+                            <option value="colorful">🌈 colorful</option>
+                            <option value="neon">💡 neon</option>
+                            <option value="fluorescent">💡 fluorescent</option>
+                            <option value="transparent">◻️ transparent</option>
+                            <option value="luminous">✨ luminous</option>
+                            <option value="glowing">✨ glowing</option>
+                            <option value="metallic">🔗 metallic</option>
+                            <option value="chrome">🔗 chrome</option>
+                        </optgroup>
+                    </select>
                 </div>
                 <div>
                     <label>Custom Color (overrides)</label>
@@ -707,7 +695,7 @@ select option { background: #180d0d; color: #fff; }
                 </div>
                 <div>
                     <label>&nbsp;</label>
-                    <div class="hint-box">💡 Color dropdown auto-fills the color field</div>
+                    <div class="hint-box">💡 Businesses auto-skip "a/an" articles</div>
                 </div>
             </div>
 
@@ -1043,8 +1031,8 @@ bikes:["Akuma","Apocalypse Deathbike","Avarus","Bagger","Bati 801","Bati 801RR",
 boats:["Dinghy","Dinghy (2-Seater)","Dinghy (Yacht)","Jetmax","Marquis","SeaShark","Speeder","Squalo","Suntrap","Toro","Tropic"],
 planes:["Alpha-Z1","Cuban 800","Dodo","Duster","Howard NX-25","Luxor","Luxor Deluxe","Mallard","Mammatus","Microlight","Nimbus","P-45 Nokota","V-65 Molotok","Velum"],
 helicopters:["Buzzard","Frogger","Maverick","Sparrow","SuperVolito Carbon","Swift Deluxe","Volatus"],
-privateBiz:["Ammunition Store","ATM business","Bar","Car wash","Car sharing","Chip tuning","Clothing shop","Electric station","Farm","Flower shop","Fight club","Furniture shop","Gas station","Grand Elite","Hair salon","Jewelry store","Juice shop","Luna park","Parking","Pet Shop","State object","Service station","Tattoo studio","Taxi company","Warehouse","24/7 Store","private business","Business Control","Gas station Control","Chip tuning Control","business"],
-familyBiz:["Burger shop","Cowshed","Freight train","Plantation","Oil Well","Pumpkin plantation","Cabbage plantation","Mandarin plantation","Pineapple plantation","family business"],
+privateBiz:["Ammunition Store business","ATM business","Bar business","Car wash business","Car sharing business","Chip tuning business","Clothing shop business","Electric station business","Farm business","Flower shop business","Fight club business","Furniture shop business","Gas station business","Grand Elite business","Hair salon business","Jewelry store business","Juice shop business","Luna park business","Parking business","Pet Shop business","State object business","Service station business","Tattoo studio business","Taxi company business","Warehouse business","24/7 Store business","private business","Business Control","Gas station Control","Chip tuning Control","business"],
+familyBiz:["Burger shop business","Cowshed business","Freight train business","Plantation business","Oil Well business","Pumpkin plantation business","Cabbage plantation business","Mandarin plantation business","Pineapple plantation business","family business"],
 bizShares:["Taxi fleet shares","Gas station shares","Chip tuning shares","Barber shop shares","Tattoo studio shares","Armory store shares","Bar shares","Car sharing shares"],
 maleTops:["Air Bior pullover sweater","black jacket with yellow trim","bomber jacket with glowing elements","branded insulated hoodie","branded longsleeve","branded T-shirt","bright hoodie","branded Molo T-shirt","Casual neon set","Casual neon torso","Chanel top","collection 2022 T-shirt","cropp collection T-shirt","denim jacket","fur coat without a hood","Glowing Bomber Set NEW Sample LW","Grand RP collection hoodie","Grand RP collection T-shirt","haliky hoodie","haliky T-shirt","Hoodie with Balaclava Cap X Yazzy","jacket with luminous trim","jacket with T-shirt","Lui Vi jacket","Lui Vi sweatshirt","Lui Vi full set","Lui Vi T-shirt","LM Playboy sweatshirt with luminous print","LM Playboy jacket with luminous print","LM Playboy T-shirt with luminous print","LM Playboy full set with luminous print","Lui Vi top","Mikachu hoodie","mix collection T-shirt","Muci hoodie","Muci hoodie with snake","Muci Not Fake hoodie","Muci sweatshirt","Niki new collection hoodie","Niki tech top","Niki track suit top","Off-White sweatshirt","Philip Plein T-shirt","scary turtleneck T-shirt","Social Club hoodie","Ston Islan Classic Sportswear","summer collection T-shirt","T-shirt of one-color CAP brand","The West Pace jacket","trendy jacket","TRON full set","TRON torso","Tsum collection T-shirt","vintage Abibas Olympic Jerseys","luminous jacket with turquoise trim","luminous T-shirt","UP-Green Sweatshirt","Wide printed football T-shirt","shirts","clothing"],
 malePants:["Abibas pants","Abibas sport pants","Abibas sweatpants","bright trousers","Bior pants","Grand RP collection pants","Muci pants","Muci trousers","Casual neon pants","Classic denim shorts","half-glowing pants","insulated personal pants","Lui Vi pants","luminous Fendi pants","luminous Grand RP trousers","LM Playboy pants with luminous print","luminous trousers","Leather gothic pants","new fashionable joggers","Niki new collection pants","Niki tech fleece pants","Niki track suit pants","neon pants","Neon Pants Set New Sample LW","summer voyage shorts","Shorts Lui Vi","TRON pants","pants","trousers","shorts"],
@@ -1122,7 +1110,6 @@ function switchTab(tabName) {
     if (tabName === 'templates' && document.getElementById('templateGrid').children.length === 0) regenerateTemplates();
 }
 
-// ===== COLOR SELECT FUNCTION =====
 function onColorSelect() {
     const selectedColor = document.getElementById('colorSelect').value;
     if (selectedColor) {
@@ -1238,6 +1225,7 @@ function setCat(cat) { document.getElementById('adCategory').value = cat; }
 const AN_STARTS = ['apartment','automatic','emerald','organization','old','opened','oil','atm','ammunition','arena'];
 const NO_ARTICLE = ['wires','dice','milk','sand','snow','timber','copper','obsidian','pet food','seeds','shirts','shoes','clothing','pants','trousers','shorts','letters','sim cards','stones','panels','fruits','vegetables','tickets','containers','skins','wheels','plates','masks','pets','juices','tunings','barrels','canisters','batteries','chargers','maps','rods','drills','sawmills','fireworks','statues','drawings','lollipops','gifts','tokens','pearls','pickaxes','mushrooms','sponges','threads','shots','shares','pumpkins','mandarins','strawberries','pineapples','cabbages','diamonds','rubies','emeralds','salmon','carp','perch','trout','looking for','apartments','houses','sneakers','watches','fish','mattresses','statues','tickets','fragments','biosparks','keys','plates','wells','rods','drills','sawmills','shots','hookahs','leashes','stones','tokens','tuning'];
 
+// ===== UPDATED: Removes "a/an" for businesses =====
 function autoArticle() {
     const qty = document.getElementById('qty').value;
     const propNum = document.getElementById('propNum').value.trim();
@@ -1248,8 +1236,23 @@ function autoArticle() {
     const lower = item.toLowerCase().replace(/^"/, '').replace(/"$/, '');
     if (item.startsWith('"')) { art.value = ''; return; }
     if (lower.startsWith('looking for')) { art.value = ''; return; }
+    
+    // NEW: Check if item is a business - no article needed
+    if (lower.includes('business') || lower.includes('shares') || lower.includes('control')) {
+        art.value = ''; return;
+    }
+    
+    // Check for specific private/family business names (even without "business" word)
+    const allBizNames = [...DB.privateBiz, ...DB.familyBiz];
+    for (const b of allBizNames) {
+        const bLower = b.toLowerCase().replace(/\s+business$/i, '');
+        if (lower === bLower || lower.startsWith(bLower + ' ') || lower === b.toLowerCase()) {
+            art.value = ''; return;
+        }
+    }
+    
     for (const na of NO_ARTICLE) if (lower.includes(na)) { art.value = ''; return; }
-    const needsArticle = ['house','apartment','mansion','car','motorcycle','helicopter','plane','boat','business','drill','sawmill','rod','well','ticket','canister','battery','charger','hookah','firework','pickaxe','pearl','mushroom','sponge','token','thread','inventory','container','stone','mattress','cage','biospark','leash','map','bodycam','ring','coin','statue','drawing','gift','lollipop','skin','plate','fragment','kit','license','key','copper','timber','perch'];
+    const needsArticle = ['house','apartment','mansion','car','motorcycle','helicopter','plane','boat','drill','sawmill','rod','well','ticket','canister','battery','charger','hookah','firework','pickaxe','pearl','mushroom','sponge','token','thread','inventory','container','stone','mattress','cage','biospark','leash','map','bodycam','ring','coin','statue','drawing','gift','lollipop','skin','plate','fragment','kit','license','key','copper','timber','perch'];
     let needs = false;
     for (const n of needsArticle) if (lower.startsWith(n) || lower.includes(' ' + n)) { needs = true; break; }
     if (!needs) { art.value = ''; return; }
@@ -1266,7 +1269,7 @@ function detectCategoryFromItem(item) {
     for (const v of [...DB.vehicles,...DB.notSellable,...DB.bikes,...DB.boats,...DB.planes,...DB.helicopters]) if (l === v.toLowerCase()) return 'Auto';
     if ((l === 'car' || l === 'a car') && !l.includes('car ticket') && !l.includes('car sharing') && !l.includes('car wash')) return 'Auto';
     if (['motorcycle','helicopter','plane','boat','a motorcycle','a helicopter','a plane','a boat'].includes(l)) return 'Auto';
-    for (const b of [...DB.privateBiz,...DB.familyBiz]) if (l.includes(b.toLowerCase())) return 'Business';
+    for (const b of [...DB.privateBiz,...DB.familyBiz]) if (l.includes(b.toLowerCase().replace(/\s+business$/i, ''))) return 'Business';
     for (const s of DB.bizShares) if (l.includes(s.toLowerCase())) return 'Business';
     if (l.includes('business') || l.includes('control')) return 'Business';
     if (['worker','trucker','lawyer','dancer','singer','bodyguard','driver','assistant','firefighter','photographer','gardener','electrician','locksmith','surveyor'].some(w => l.includes(w))) return 'Work';
@@ -1484,14 +1487,14 @@ function generateTemplates() {
     });
 
     DB.privateBiz.forEach(b => {
-        const name = /business$/i.test(b) ? b : `${b} business`;
-        tpl.push({category:"business", text:`Selling ${name}. ${priceStr("Price",mode,custom,sfx)}`});
-        tpl.push({category:"business", text:`Buying ${name}. ${priceStr("Budget",mode,custom,sfx)}`});
-        for (let i = 0; i < 3; i++) tpl.push({category:"business", text:`Selling ${b.replace(/\s+business$/i,'')} №${rand(1,200)}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Selling ${b}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Buying ${b}. ${priceStr("Budget",mode,custom,sfx)}`});
+        const shortName = b.replace(/\s+business$/i,'');
+        for (let i = 0; i < 3; i++) tpl.push({category:"business", text:`Selling ${shortName} №${rand(1,200)}. ${priceStr("Price",mode,custom,sfx)}`});
     });
     DB.familyBiz.forEach(b => {
-        tpl.push({category:"business", text:`Selling ${b} business. ${priceStr("Price",mode,custom,sfx)}`});
-        tpl.push({category:"business", text:`Buying ${b} business. ${priceStr("Budget",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Selling ${b}. ${priceStr("Price",mode,custom,sfx)}`});
+        tpl.push({category:"business", text:`Buying ${b}. ${priceStr("Budget",mode,custom,sfx)}`});
     });
     DB.bizShares.forEach(s => {
         tpl.push({category:"business", text:`Selling ${s}. ${priceStr("Price",mode,custom,sfx)}`});
