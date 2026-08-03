@@ -447,6 +447,24 @@ select option { background: #180d0d; color: #fff; }
 }
 .color-select-wrap select { flex: 1; }
 
+.price-input-wrap {
+    position: relative;
+}
+.price-hint {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #ff6666;
+    font-weight: bold;
+    pointer-events: none;
+    background: rgba(15,7,9,0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
 .credit-footer {
     text-align: center;
     padding: 25px 20px 15px;
@@ -560,9 +578,9 @@ select option { background: #180d0d; color: #fff; }
                 </div>
             </div>
 
-            <label>Item / Vehicle / Person Name (Multi-word search — e.g. "black lui vi jacket")</label>
+            <label>Item / Vehicle / Person Name (Multi-word search)</label>
             <div class="suggest-wrap">
-                <input type="text" id="itemInput" placeholder="Type keywords... e.g. house, apartment, cowshed, black lui vi" oninput="showSuggestions(this.value, 'itemInput');autoArticle();buildAd()" onfocus="showSuggestions(this.value, 'itemInput')" autocomplete="off">
+                <input type="text" id="itemInput" placeholder="Type keywords... e.g. house, cowshed, wizard cat, unicorn wings" oninput="showSuggestions(this.value, 'itemInput');autoArticle();buildAd()" onfocus="showSuggestions(this.value, 'itemInput')" autocomplete="off">
                 <div class="suggestions" id="sugBox_itemInput"></div>
             </div>
 
@@ -695,7 +713,7 @@ select option { background: #180d0d; color: #fff; }
                 </div>
                 <div>
                     <label>&nbsp;</label>
-                    <div class="hint-box">💡 Businesses auto-skip "a/an" articles</div>
+                    <div class="hint-box">💡 Smart Price: Type 25k → $25.000 | 1.5m → $1.5 Million</div>
                 </div>
             </div>
 
@@ -829,7 +847,7 @@ select option { background: #180d0d; color: #fff; }
         </div>
 
         <div class="panel">
-            <div class="panel-title">💰 Price (Type auto-selected based on Action)</div>
+            <div class="panel-title">💰 Smart Price Conversion (Auto k → .000, m → Million)</div>
             <div class="grid grid-4">
                 <div>
                     <label>Type (Auto)</label>
@@ -843,11 +861,14 @@ select option { background: #180d0d; color: #fff; }
                     </select>
                 </div>
                 <div>
-                    <label>Amount</label>
-                    <input type="text" id="priceAmt" placeholder="e.g. 500.000" oninput="buildAd()">
+                    <label>Amount (Type 25k, 1.5m, 500000)</label>
+                    <div class="price-input-wrap">
+                        <input type="text" id="priceAmt" placeholder="e.g. 25k, 500000, 1.5m" oninput="onPriceInput('priceAmt', 'priceAmtHint', 'priceUnit');buildAd()">
+                        <span class="price-hint" id="priceAmtHint"></span>
+                    </div>
                 </div>
                 <div>
-                    <label>Unit</label>
+                    <label>Unit (Auto)</label>
                     <select id="priceUnit" onchange="buildAd()">
                         <option value="">None</option>
                         <option value="Million">Million</option>
@@ -866,12 +887,18 @@ select option { background: #180d0d; color: #fff; }
             </div>
             <div class="grid grid-2">
                 <div>
-                    <label>2nd Price</label>
-                    <input type="text" id="price2" placeholder="e.g. $7.000 each" oninput="buildAd()">
+                    <label>2nd Price (Smart: 25k, 1.5m)</label>
+                    <div class="price-input-wrap">
+                        <input type="text" id="price2" placeholder="e.g. 7000 each or 1.5m" oninput="onPriceInput2('price2', 'price2Hint');buildAd()">
+                        <span class="price-hint" id="price2Hint"></span>
+                    </div>
                 </div>
                 <div>
-                    <label>3rd Price</label>
-                    <input type="text" id="price3" placeholder="e.g. $200.000" oninput="buildAd()">
+                    <label>3rd Price (Smart: 25k, 1.5m)</label>
+                    <div class="price-input-wrap">
+                        <input type="text" id="price3" placeholder="e.g. 200k or 2m" oninput="onPriceInput2('price3', 'price3Hint');buildAd()">
+                        <span class="price-hint" id="price3Hint"></span>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-2">
@@ -1004,7 +1031,7 @@ select option { background: #180d0d; color: #fff; }
 
         <div class="panel">
             <div class="panel-title">🔍 Full Database Search (multi-word supported)</div>
-            <input type="text" id="dbSearch" placeholder="Search: black lui vi, luminous wheels, panda cage..." oninput="searchDB(this.value)">
+            <input type="text" id="dbSearch" placeholder="Search: black lui vi, wizard cat, unicorn wings..." oninput="searchDB(this.value)">
             <div id="dbResults" style="max-height:400px;overflow-y:auto;margin-top:10px"></div>
         </div>
     </div>
@@ -1025,7 +1052,7 @@ select option { background: #180d0d; color: #fff; }
 const DB = {
 realEstate:["house","apartment","mansion","Casino penthouse","2 houses","3 houses","2 apartments","3 apartments","house with a garden","apartment with a garden","house with a swimming pool","house with helipad","house with tennis court","house with custom interior","house with insurance","house with long driveway","house with spacious backyard","house with nice views","apartment with nice views","house with 2 g.s.","house with 5 g.s.","house with 9 g.s.","house with 25 g.s.","house with 30 g.s.","apartment with 2 g.s.","apartment with 5 g.s.","apartment with 9 g.s.","apartment with 25 g.s.","apartment with 30 g.s.","house with 3 w.h.","house with 4 w.h.","house with 5 w.h."],
 dating:["Looking for (First and Last name)","Looking for a family","Looking for family members","Looking for a date","Looking for a wife","Looking for a husband","Looking for a valentine","Looking for a friend","Looking for friends","Looking for a boyfriend","Looking for boyfriends","Looking for a girlfriend","Looking for girlfriends","Looking for Name Surname","Looking for Casino poker players","Looking for a lesbian","Looking for a gay"],
-vehicles:["Adder","Alpha","Annis ZR-350","Annis 350Z","Annis Silvia (S15)","Annis Skyline GT-R (R34)","Annis GT-R I","Annis RX-7 (FD)","Annis RX-7 (Veilside Fortune)","Annis WRX 2004","Apocalypse Impaler","Apocalypse Imperator","Apocalypse Issi","Apocalypse Slamvan","Ardent","Asbo","Asea","Asterope","Autarch","Albany Escalade","Baller","Baller LE LWB","Baller SG","Banshee","Banshee 900R","Beater Emperor","Beater Mariachi Tornado","Beater Surfer","Beater Tornado","Benefactor-MG GT","Benefactor-MG C63 (W205)","Benefactor-MG C63 Coupe (W205)","Benefactor-MG G63 (G770)","Benefactor-MG S63 (W222)","Benefactor-MG VT Black Series","Benefactor-Benz 600SEL (W140)","Benefactor-Benz E420 (W210)","Benefactor-Benz Vito (V447)","Benefactor-Maybach Pullman","Bestia GTS","BF Injection","Bison","Blade","Blista","Blista Kanjo","Bodhi","Brawler","Bravado Charger SRT","Bravado Charger 1969","Bravado Challenger 2016","Bravado Ram 1500","Bravado Viper 2008","Brioso R/A","Buccaneer","Buffalo","Bullet","Benefactor-MG SL65 (R230)","Burgerfahrzeug Golf GTI Vision","Canis Grand Cherokee","Calico GTF","Caracara 4x4","Carbonizzare","Casco","Cavalcade","Cheburek","Cheetah","Cheetah Classic","Chino","Clique","Coil Cybertruck","Coil Model S","Coil Model X","Coil Roadster","Cognoscenti","Cognoscenti 55","Cognoscenti Cabrio","Comet","Comet S2","Comet SR","Contender","Coquette","Coquette Blackfin","Coquette D10","Coquette Classic","Cyclone","Cypher","Declasse Corvette C7","Declasse Tahoe","Deveste Eight","Deviant","Dilettante","Dinka RT-3000","Dinka NSX 2017","Dominator","Dominator ASP","Dominator GTT","Dominator GTX","Dominator PiBwasser","Drift Yosemite","Dubsta","Dubsta 6x6","Dubsta SG","Dukes","Declasse Camaro 2020","Elegy Retro Custom","Elegy RH8","Ellie","Emperor","Emperor LX-570","Emperor RCF","Entity XF","Enus Cullinan","Enus Phantom","Enus Spectre","Enus Continental GT","ETR-1","Euros","Exemplar","F620","Faction","Felon","Felon GT","Feltzer","Flash GT","FMJ","FQ 2","Fugitive","Furore GT","Fusillade","Futo","Futo GTX","Future Shock Issi","Gallivanter Defender","Gallivanter Defender Halloween Edition","Gallivanter Defender Christmas Edition","Gauntlet","Gauntlet Classic","Gauntlet Hellfire","Gauntlet Redwood","GB200","Glendale","GP-1","Granger","Grotti Italia (F458)","GT 500","Hermes","Hotknife","Huntley S","Imorgon","Impaler","Infernus","Infernus Classic","Ingot","Issi","Itali GTB","Itali GTB Custom","Itali GTO","Jackal","JB 700","Jester","Jester (Racecar)","Jester Classic","Jester RR","Journey","Jugular","Kamacho","Khamelion","Komoda","Krieger","Karin Land Cruiser 200","Karin Tundra 2021","Karin Supra A80","Karin Mark 2","Lampadati Giulia GTA","Landstalker","Lynx","Mamba","Massacro","Mammoth HUM EV","Monroe","Moonbeam","Monowheel","Nebula Turbo","Neon","Nero","Nero Custom","Nightshade","Novak","Oracle","Osiris","Obey A8","Obey R8","Obey RS6","Obey RS7","Obey S8 (D4)","Ocelot Victor","Ocelot F-Type R","Obey A6","Obey Q8","Ocelot Vanquish Zagto SB","Ocelot Eletre","Panto","Paragon R","Pariah","Patriot","Patriot Stretch","Pegassi Huayra BC","Pegassi Performante (LP640)","Penetrator","Penumbra","Peyote Gasser","Pfister 811","Pfister Panamera","Pfister Taycan","Pfister 918 Spyder","Pheonix","Picador","Prairie","Premier","Previon","Progen 675 LT","Raiden","Rancher XL","Rapid GT","Raptor","Rat-Loader","Rat-Truck","RE-7B","Reaper","Rebel","Rebla GTS","Regina","Remus","Revolter","Rhapsody","Riata","Rocoto","Ruiner","Rumpo","Ruston","Rusty Rebel","Sabre Turbo","Sandking SWB","Sandking XL","SC-1","Schafter","Schafter LWB","Schafter LWB (Armored)","Schafter V12","Schlagen GT","Schwarzer","Seminole","Sentinel Classic","Sentinel XS","Serrano","Seven-70","Shelby GT500","Slam Van","Slamvan Custom","Specter","Stafford","Stallion","Stinger","Stinger GT","Stirling GT","Streiter","Stretch","Sultan","Sultan Classic","Sultan RS","Sultan RS Classic","Super Diamond","Surano","Surge","Swinger","T-20","Tailgater","Tailgater S","Taipan","Tampa","Tempesta","Tezeract","Thrax","Tigon","Torero","Toros","Tropos Rallye","Truffade Centodieci","Truffade Chiron","Tulip","Turismo Classic","Turismo R","Tyrant","Tyrus","Ubermacht 760 (LI)","Ubermacht I8","Ubermacht M3 (G80)","Ubermacht M3 (E46)","Ubermacht M4 (G82)","Ubermacht M4 (GTS)","Ubermacht M5 (E34)","Ubermacht M5 (E60)","Ubermacht M5 (CS)","Ubermacht M5 (CS) Halloween Edition","Ubermacht M8 (F91)","Ubermacht X5 (E70)","Ubermacht X5 (G05)","Ubermacht X6-M (E71)","Ubermacht X7 (G07)","V-STR","Vacca","Vagner","Vamos","Vectre","Velierer","Vigero","Virgo","Virgo Classic","Viseris","Visione","Voltic","Voodoo","Voodoo Custom","Warrener","Warrener HKR","Washington","Windsor","Windsor Drop","X80 Proto","XA-21","XLS","XLS (Armored)","Yosemite","Yosemite Rancher","Z-Type","Zentorno","Zion","Zion Cabrio","Zion Classic","Zorrusso","9F","9F Cabrio","car","motorcycle","helicopter","plane","boat"],
+vehicles:["Adder","Alpha","Annis ZR-350","Annis 350Z","Annis Silvia (S15)","Annis Skyline GT-R (R34)","Annis GT-R I","Annis RX-7 (FD)","Annis RX-7 (Veilside Fortune)","Annis WRX 2004","Apocalypse Impaler","Apocalypse Imperator","Apocalypse Issi","Apocalypse Slamvan","Ardent","Asbo","Asea","Asterope","Autarch","Albany Escalade","Baller","Baller LE LWB","Baller SG","Banshee","Banshee 900R","Beater Emperor","Beater Mariachi Tornado","Beater Surfer","Beater Tornado","Benefactor-MG GT","Benefactor-MG C63 (W205)","Benefactor-MG C63 Coupe (W205)","Benefactor-MG G63 (G770)","Benefactor-MG S63 (W222)","Benefactor-MG VT Black Series","Benefactor-Benz 600SEL (W140)","Benefactor-Benz E420 (W210)","Benefactor-Benz Vito (V447)","Benefactor-Maybach Pullman","Bestia GTS","BF Injection","Bison","Blade","Blista","Blista Kanjo","Bodhi","Brawler","Bravado Charger SRT","Bravado Charger 1969","Bravado Challenger 2016","Bravado Ram 1500","Bravado Viper 2008","Brioso R/A","Buccaneer","Buffalo","Bullet","Benefactor-MG SL65 (R230)","Burgerfahrzeug Golf GTI Vision","Canis Grand Cherokee","Calico GTF","Caracara 4x4","Carbonizzare","Casco","Cavalcade","Cheburek","Cheetah","Cheetah Classic","Chino","Clique","Coil Cybertruck","Coil Model S","Coil Model X","Coil Roadster","Cognoscenti","Cognoscenti 55","Cognoscenti Cabrio","Comet","Comet S2","Comet SR","Contender","Coquette","Coquette Blackfin","Coquette D10","Couquette Classic","Cyclone","Cypher","Declasse Corvette C7","Declasse Tahoe","Deveste Eight","Deviant","Dilettante","Dinka RT-3000","Dinka NSX 2017","Dominator","Dominator ASP","Dominator GTT","Dominator GTX","Dominator PiBwasser","Drift Yosemite","Dubsta","Dubsta 6x6","Dubsta SG","Dukes","Declasse Camaro 2020","Elegy Retro Custom","Elegy RH8","Ellie","Emperor","Emperor LX-570","Emperor RCF","Entity XF","Enus Cullinan","Enus Phantom","Enus Spectre","Enus Continental GT","ETR-1","Euros","Exemplar","F620","Faction","Felon","Felon GT","Feltzer","Flash GT","FMJ","FQ 2","Fugitive","Furore GT","Fusilade","Futo","Futo GTX","Future Shock Issi","Gallivanter Defender","Gallivanter Defender Halloween Edition","Gallivanter Defender Christmas Edition","Gauntlet","Gauntlet Classic","Gauntlet Hellfire","Gauntlet Redwood","GB200","Glendale","GP-1","Granger","Growler","Grotti Italia (F458)","GT 500","Hermes","Hotknife","Huntley S","Imorgon","Impaler","Infernus","Infernus Classic","Ingot","Issi","Itali GTB","Itali GTB Custom","Itali GTO","Jackal","JB 700","Jester","Jester (Racecar)","Jester Classic","Jester RR","Journey","Jugular","Kamacho","Khamelion","Komoda","Krieger","Karin Land Cruiser 200","Karin Tundra 2021","Karin Supra A80","Karin Mark 2","Lampadati Giulia GTA","Landstalker","Lynx","Mamba","Massacro","Mammoth HUM EV","Monroe","Moonbeam","Monowheel","Nebula Turbo","Neon","Nero","Nero Custom","Nightshade","Novak","Oracle","Osiris","Obey A8","Obey R8","Obey RS6","Obey RS7","Obey S8 (D4)","Ocelot Victor","Ocelot F-Type R","Obey A6","Obey Q8","Ocelot Vanquish Zagto SB","Ocelot Eletre","Panto","Paragon R","Pariah","Patriot","Patriot Stretch","Pegassi Huayra BC","Pegassi Performante (LP640)","Penetrator","Penumbra","Peyote Gasser","Pfister 811","Pfister Panamera","Pfister Taycan","Pfister 918 Spyder","Pheonix","Picador","Prairie","Premier","Previon","Progen 675 LT","Raiden","Rancher XL","Rapid GT","Raptor","Rat-Loader","Rat-Truck","RE-7B","Reaper","Rebel","Rebla GTS","Regina","Remus","Revolter","Rhapsody","Riata","Rocoto","Ruiner","Rumpo","Ruston","Rusty Rebel","Sabre Turbo","Sandking SWB","Sandking XL","SC-1","Schafter","Schafter LWB","Schafter LWB (Armored)","Schafter V12","Schlagen GT","Schwarzer","Seminole","Sentinel Classic","Sentinel XS","Serrano","Seven-70","Shelby GT500","Slam Van","Slamvan Custom","Specter","Stafford","Stallion","Stinger","Stinger GT","Stirling GT","Streiter","Stretch","Sultan","Sultan Classic","Sultan RS","Sultan RS Classic","Super Diamond","Surano","Surge","Swinger","T-20","Tailgater","Tailgater S","Taipan","Tampa","Tempesta","Tezeract","Thrax","Tigon","Torero","Toros","Tropos Rallye","Truffade Centodieci","Truffade Chiron","Tulip","Turismo Classic","Turismo R","Tyrant","Tyrus","Ubermacht 760 (LI)","Ubermacht I8","Ubermacht M3 (G80)","Ubermacht M3 (E46)","Ubermacht M4 (G82)","Ubermacht M4 (GTS)","Ubermacht M5 (E34)","Ubermacht M5 (E60)","Ubermacht M5 (CS)","Ubermacht M5 (CS) Halloween Edition","Ubermacht M8 (F91)","Ubermacht X5 (E70)","Ubermacht X5 (G05)","Ubermacht X6-M (E71)","Ubermacht X7 (G07)","V-STR","Vacca","Vagner","Vamos","Vectre","Velierer","Vigero","Virgo","Virgo Classic","Viseris","Visione","Voltic","Voodoo","Voodoo Custom","Warrener","Warrener HKR","Washington","Windsor","Windsor Drop","X80 Proto","XA-21","XLS","XLS (Armored)","Yosemite","Yosemite Rancher","Z-Type","Zentorno","Zion","Zion Cabrio","Zion Classic","Zorrusso","9F","9F Cabrio","car","motorcycle","helicopter","plane","boat"],
 notSellable:["Annis Concept 2021","Brabus Rocket G900","Benefactor-MG G63 (6X6)","Benefactor-Benz GLS 63","Benefactor-Benz MG Visione","Benefactor-Benz Vision AVTR","Benefactor-MG Project One","Benefactor-MG E63 (W213)","Benefactor-Maybach GLS600","Benefactor-MG GLE63 Coupe","Benefactor-MG A45 (W176)","Benefactor-MG CLS53 (C257)","Benefactor-Benz GLC300","Benefactor-Benz 300 SL (W198)","Benefactor-Benz 190E (Evolution II)","Benefactor-Maybach S63 (W223)","Bravado Charger Daytona","Enus EXP 10","Enus Wraith","Genesis G90","Grotti FXX-K Evo","Grotti Tributo (F8)","Grotti Stradale (SF90)","Grotti Superfast (F812)","Grotti Pista (F488)","Grotti Monza (SP2)","Gallivanter Evoque","KMTA Optima","Karin Corolla AE","Overflod Jesko 2020","Overflod CCX","Overflod One","Overflod Gemera","Overflod Regera","Obey TT","Obey RS5 Coupe","Obey RS E-Tron GT","Obey E-Tron Sportback","Ocelot Vulcan","Ocelot Evora","Ocelot GranTurismo","Pfister Cayenne","Pfister Panamera Turismo","Pfister 911 Turbo 2021","Pegassi Veneno (LP750)","Pegassi Centenario (LP770)","Pegassi Terzo","Pegassi Urus","Pegassi Diablo (SV)","Pegassi Aventador (LP700)","Pegassi Alston (SC18)","Pegassi Reventon","Pegassi Sian","Pegassi Countach (LP400)","Pegassi Countach (LPI 800-4)","Pegassi SE (PJ1)","Progen Elva","Progen P1","Progen 765 LT (Spider)","Shelby Cobra Daytona","Skoda Octavia RS","SSC Tuatara","Truffade Veyron","Truffade La Voiture Noire","Truffade Bolide","Truffade Divo","Ubermacht M5 (F90)","Ubermacht Z4 (E85)","Ubermacht Vision","Vapid Focus RS","Vapid GT 2017","Vapid Raptor F150","Vapid Mustang 1965","Vapid Mustang MACH-E"],
 bikes:["Akuma","Apocalypse Deathbike","Avarus","Bagger","Bati 801","Bati 801RR","BF-400","Blazer","Blazer Lifeguard","BMX","Carbon RS","Chimera","Cliffhanger","Cruiser","Daemon","Defiler","Diabolus","Diabolus Custom","Double-T","Enduro","Esskey","Faggio","FCR 1000","FCR 1000 Custom","Future Shock Deathbike","Gargoyle","Hakuchou","Hakuchou Drag","Hexer","Innovation","Lectro","Manchez","Nemesis","Nightblade","PCJ-600","Rat Bike","Ruffian","Sanchez","Sanctus","Shotaro","Sovereign","Street Blazer","Stryder","Thrust","Tri-Cycles Race Bike","Vader","Vindicator","Vortex","Whippet Race Bike","Wolfsbane","Zombie Chopper"],
 boats:["Dinghy","Dinghy (2-Seater)","Dinghy (Yacht)","Jetmax","Marquis","SeaShark","Speeder","Squalo","Suntrap","Toro","Tropic"],
@@ -1036,26 +1063,26 @@ familyBiz:["Burger shop business","Cowshed business","Freight train business","P
 bizShares:["Taxi fleet shares","Gas station shares","Chip tuning shares","Barber shop shares","Tattoo studio shares","Armory store shares","Bar shares","Car sharing shares"],
 maleTops:["Air Bior pullover sweater","black jacket with yellow trim","bomber jacket with glowing elements","branded insulated hoodie","branded longsleeve","branded T-shirt","bright hoodie","branded Molo T-shirt","Casual neon set","Casual neon torso","Chanel top","collection 2022 T-shirt","cropp collection T-shirt","denim jacket","fur coat without a hood","Glowing Bomber Set NEW Sample LW","Grand RP collection hoodie","Grand RP collection T-shirt","haliky hoodie","haliky T-shirt","Hoodie with Balaclava Cap X Yazzy","jacket with luminous trim","jacket with T-shirt","Lui Vi jacket","Lui Vi sweatshirt","Lui Vi full set","Lui Vi T-shirt","LM Playboy sweatshirt with luminous print","LM Playboy jacket with luminous print","LM Playboy T-shirt with luminous print","LM Playboy full set with luminous print","Lui Vi top","Mikachu hoodie","mix collection T-shirt","Muci hoodie","Muci hoodie with snake","Muci Not Fake hoodie","Muci sweatshirt","Niki new collection hoodie","Niki tech top","Niki track suit top","Off-White sweatshirt","Philip Plein T-shirt","scary turtleneck T-shirt","Social Club hoodie","Ston Islan Classic Sportswear","summer collection T-shirt","T-shirt of one-color CAP brand","The West Pace jacket","trendy jacket","TRON full set","TRON torso","Tsum collection T-shirt","vintage Abibas Olympic Jerseys","luminous jacket with turquoise trim","luminous T-shirt","UP-Green Sweatshirt","Wide printed football T-shirt","shirts","clothing"],
 malePants:["Abibas pants","Abibas sport pants","Abibas sweatpants","bright trousers","Bior pants","Grand RP collection pants","Muci pants","Muci trousers","Casual neon pants","Classic denim shorts","half-glowing pants","insulated personal pants","Lui Vi pants","luminous Fendi pants","luminous Grand RP trousers","LM Playboy pants with luminous print","luminous trousers","Leather gothic pants","new fashionable joggers","Niki new collection pants","Niki tech fleece pants","Niki track suit pants","neon pants","Neon Pants Set New Sample LW","summer voyage shorts","Shorts Lui Vi","TRON pants","pants","trousers","shorts"],
-maleShoes:["Abibas Marquee Boost Lows shoes","Abibas Pro Bounce 2019 Lows shoes","Abibas Pezy Boost 700 V3 Alvah shoes","Abibas Pezy Boost shoes","Acic Gel Kayano sneakers","Ground Mordan 4 Retro Laser 30th shoes","Muci branded flip-flops","Mordan 1 shoes","Mordan 6 shoes","luminous shoes","Off-White luminous Keezy Boost shoes","luminous Keezy Boost shoes","neon shoes","Niki Groundporce One new collection shoes","Niki Shox shoes","Niki Uptempo shoes","Niki Zoom Freak 1 Multi-Color shoes","Off-White Pezy Boost shoes","red sneakers","RGB neon shoes","Pans sneakers","Pezy Boost shoes","rare luminous shoes","Casual neon shoes","Balenciaga Track sneakers","TRON shoes","Alastor McQueen Oversized sneakers","shoes","sneakers"],
-femaleTops:["bandana top","collection 5 top","corset top","day dress","dress","faution top","jumpsuit","long brand T-shirt","low dress","pullover with long sleeve","short pullover","stylish suit","summer bra","top 2 outerwear","top Faution","top with chains","Watch Me sweater","winter collection dress"],
-femalePants:["Abibas leggings","Abibas pants","jeans","skirt with tights","Muci shorts","Custom Jeans"],
+maleShoes:["Abibas Marquee Boost Lows shoes","Abibas Pro Bounce 2019 Lows shoes","Abibas Pezy Boost 700 V3 Alvah shoes","Abibas Pezy Boost shoes","Abibas Pezy foam shoes","Acic Gel Kayano sneakers","Ground Mordan 4 Retro Laser 30th shoes","Muci branded flip-flops","Mordan 1 shoes","Mordan 6 shoes","luminous shoes","Off-White luminous Keezy Boost shoes","luminous Keezy Boost shoes","neon shoes","Niki Groundporce One new collection shoes","Niki Shox shoes","Niki Uptempo shoes","Niki Zoom Freak 1 Multi-Color shoes","Off-White Pezy Boost shoes","red sneakers","RGB neon shoes","Pans sneakers","Pezy Boost shoes","rare luminous shoes","Casual neon shoes","Balenciaga Track sneakers","TRON shoes","Alastor McQueen Oversized sneakers","shoes","sneakers"],
+femaleTops:["bandana top","collection 5 top","corset top","day dress","dress","faution top","jumpsuit","long brand T-shirt","low dress","pullover with long sleeve","short pullover","stylish suit","summer bra","top 2 outerwear","top Faution","top with chains","Watch Me sweater","winter collection dress","Branded Top essential suit"],
+femalePants:["Abibas leggings","Abibas pants","jeans","skirt with tights","Muci shorts","Custom Jeans","Branded Bottom essential suit"],
 femaleShoes:["tall boots","luminous shoes"],
 femaleDress:["luminous dress","Love costume","Spring set S23","Wedding dress"],
 masks:["alien with neon eyes mask","anime mask","bandana mask","baseball mask","Bigness mask","boxing helmet","carnival mask","Casual neon helmet","Christmas tree mask","clown mask","cowgirl hat","Cupids crown","Daft Punk mask","demon mask","desert scarf mask","LM Playboy mask with luminous print","Lui Vi desert scarf mask","devil mask","earphones with a heart","emoji mask","evil mask","exotic mask","fox mask","gorilla mask","Glowing face scarf mask","handkerchief mask","Jason blue mask","kitsune mask","luminous head bag mask","Sashmello mask","Munk mask","monkey boss mask","Nik mask","owl mask","panama hat","penguin mask","pig mask","purge mask","raccoon mask","raptor mask","raven mask","Razer headphones","red stocking mask","reindeer mask","robot human mask","robot mask","rooster mask","samurai mask","Santa Claus mask","shamanic mask","Saruko neon mask","skeleton king mask","snowboarders mask","snowflake glasses","snowman mask","sports mask","stealthy mask","tied scarf mask","tight mask","toothy mask","trending shark head hat","TRON helmet","TV-head mask","Satanic horns","toothy mask of type 1","toothy mask of type 2","tied scarf mask of type 1","masks","masks of type 2","masks of type 5"],
-accessories:["boxing gloves","chain around the body accessory","chain lost treasure neon accessory","Cyberpunk greatsword accessory","deer antler accessory","deer antlers with a red nose accessory","flying bear on the shoulder accessory","gloves","glowing snow glasses","Grand Chain","hearts Pride glasses","neck scarf accessory","pixel glasses","Satanic Wings","shiny deer antler headband accessory","snowflake glasses","Snake around the body accessory","wristband accessory","navel piercing accessory","rabbit ears"],
+accessories:["boxing gloves","chain around the body accessory","chain lost treasure neon accessory","Cyberpunk greatsword accessory","deer antler accessory","deer antlers with a red nose accessory","flying bear on the shoulder accessory","gloves","glowing snow glasses","Grand Chain","hearts Pride glasses","neck scarf accessory","pixel glasses","Satanic Wings","shiny deer antler headband accessory","snowflake glasses","Snake around the body accessory","wristband accessory","navel piercing accessory","rabbit ears","Unicorn Wings"],
 watches:["Vasio G-Shock watch","Volex watch of type","Kolex watch of type","Volex watch","Kolex watch","watches"],
-backpacks:["Backpack from the Cubic Friend paired set skin","Backpack with piggy keychain skin","Branded Small backpack skin","Capsule backpack skin","Chain bag with spikes skin","Classic Lui Vui backpack skin","Cloud backpack skin","Cross backpack skin","Duffel Bag skin","Fur-lined bunny backpack","Gauard bag with Ladudu skin","Gingerbread house backpack skin","Gayardo shoulder bag skin","Grand backpack skin","Happy bear shoulder bag skin","HaHaHa set crossbody bag skin","Large LV crossbody bag skin","LUV backpack with wings skin","Luv Moscnino spiky heart backpack skin","LV backpack with water prints skin","LV crossbody bag skin","LW Crossbody Bag skin","Memo Bag Ladudu skin","Motosport Waist bag skin","Neon Chrome handbag skin","Scary chicken backpack skin","Skeleton cheetah plush backpack skin","Small shoulder bag LW skin","SSC Kit Bag skin","Sweet Sheep fur bag","backpack skin","backpack skins"],
+backpacks:["Backpack from the Cubic Friend paired set skin","Backpack with piggy keychain skin","Branded Small backpack skin","Capsule backpack skin","Chain bag with spikes skin","Classic Lui Vui backpack skin","Cloud backpack skin","Cross backpack skin","Duffel Bag skin","Fur-lined bunny backpack","Gauard bag with Ladudu skin","Gingerbread house backpack skin","Gayardo shoulder bag skin","Grand backpack skin","Happy bear shoulder bag skin","HaHaHa set crossbody bag skin","Large LV crossbody bag skin","LUV backpack with wings skin","Luv Moscnino spiky heart backpack skin","LV backpack with water prints skin","LV crossbody bag skin","LW Crossbody Bag skin","Memo Bag Ladudu skin","Motosport Waist bag skin","Neon Chrome handbag skin","Scary chicken backpack skin","Skeleton cheetah plush backpack skin","Small shoulder bag LW skin","SSC Kit Bag skin","Sweet Sheep fur bag","X Ban Lui Vui Backpack Skin","LW Everyday Bag Skin","backpack skin","backpack skins"],
 containers:["valuable container","valuable containers","desert scarf mask container","desert scarf mask containers","biker container","biker containers","Brand T-shirts 2 container","Brand shorts 2 container","trucker container","trucker containers","racer container","racer containers","Grand racers container","Grand racers containers","Ingrand container","Ingrand containers","Progen container","Progen containers","Maserati container","Maserati containers","Benefactor container","Benefactor containers","gardener container","gardener containers","rare love container","rare love containers","regular love container","regular love containers","Renault container","Renault containers","resources container","resources containers","diver container","diver containers","organization container","organization containers","sphere of influence container","wheels 1 container","wheels 2 container","wheels 3 container","wheels 1 containers","wheels 2 containers","wheels 3 containers","old autumn gold container","old summer gold container","old winter gold container","old autumn gold containers","old summer gold containers","old winter gold containers","School container","arena container","daily container","Halloween container","Halloween containers","womens gift container of type 1","womens gift container of type 2","males gift container of type 1","males gift container of type 2","blue womens top container of type 4","black womens top container of type 4","Benefactor E500 (W124) container","daily study of the organization container","Captured caravans container","Delivered caravans container","Valentine 2025 container","Valentine 2025 containers","case of delivered caravans container","drifter 2 container","containers"],
 shoulderPets:["six tailed fox on shoulder pet","hamster on shoulder pet","strong chicken on shoulder pet","owl on shoulder pet","flying bear on shoulder pet","toothless dragon on shoulder pet","leon brawl on shoulder pet","lovely bird egg on shoulder pet","Mr. Robot friend on shoulder pet","el primo corazon brawl on shoulder pet","black voron on shoulder pet"],
 cagedPets:["cage with a Border Collie","cage with a Cat","cage with a Cougar","cage with a Cyberdog","cage with a Husky","cage with a Panther","cage with a Pig","cage with a Poodle","cage with a Monkey","cage with a Pug","cage with a Christmas Elf","cage with a Santa Claus","cage with a Fancy bear","cage with a Cute Hippo","cage with a Mr Candy Cane","cage with a Futuristic Friend","cage with a New years Husky","cage with a Rabbit","cage with a Rat","cage with a Retriever","cage with a Robobeast","cage with a Rooster","cage with a Puma","cage with a Rottweiler","cage with a Westie","cage with a Kitty Bunny","cage with a Duckling","cage with a Panda","cage with a Lion Cub","cage with a Mini Robot","cage with a Cosmodog","cage with a Easter Bunny","cage with a pet","cage with a Dog"],
-items:["automatic drill","automatic drills","automatic sawmill","automatic sawmills","automatic rod","automatic rods","automatic oil well","automatic oil wells","automatic watering can","automatic watering cans","backpack skin","backpack skins","battery","batteries","Biospark","Biosparks","charger","chargers","Christmas key","Christmas keys","Christmas copper","Christmas timber","Christmas perch","Christmas seed","Christmas seeds","Christmas lollipop","Christmas lollipops","New years gift","New years gifts","Little gift","Little gifts","Big gift","Big gifts","Opened gift","Opened gifts","Drawing","Drawings","Dirty Statue","Dirty Statues","Purified Statue","Purified Statues","dice","fishing rod","fishing rods","firework","fireworks","fuel for resource extraction","Grand ticket","Grand tickets","GrandPro BodyCam","GrandPro BodyCams","hookah","hookahs","Leash","Leashes","letter","letters","license plate","license plates","custom license plate","custom license plates","regular lottery ticket","regular lottery tickets","rare lottery ticket","rare lottery tickets","flame and water lottery ticket","flame and water lottery tickets","Cayo Perico ticket","Cayo Perico tickets","Car ticket","Car tickets","Secret ticket fragment","Secret ticket fragments","Secret ticket","Secret tickets","Royal Artifacts lottery ticket","Royal Artifacts lottery tickets","luminous stone","luminous stones","milk","mushroom","mushrooms","paint can","paint cans","pearl","pearls","pet food","pet foods","pickaxe","pickaxes","Prime","Prime Platinum","repair kit","repair kits","Resource Miners ticket","Resource Miners tickets","sand","snow","solar panel","solar panels","SIM card","SIM cards","scrap metal","top quality metal","thread","threads","timber","token","tokens","tonic treat","tonic treats","Treasure Map","Treasure Maps","video card","video cards","wires","small inflatable mattress","small inflatable mattresses","large inflatable mattress","large inflatable mattresses","sponge","sponges","power booster shot","power booster shots","luminous wheels","fuel canister","fuel canisters","premium fuel canister","premium fuel canisters","solar barrel","solar barrels","gasoline barrel","gasoline barrels","kerosene barrel","kerosene barrels","letter G","letter R","letter A","letter N","letter D","GRAND letters","spatial sound effect","spatial sound effects","animated items","Fire Ring","Lightning Charge","Chick","inventory","low quality inventory","medium quality inventory","high quality inventory","max quality inventory","advanced quality inventory","low quality fishing rod","medium quality fishing rod","high quality fishing rod","max quality fishing rod","advanced quality fishing rod","low quality pickaxe","medium quality pickaxe","high quality pickaxe","max quality pickaxe","advanced quality pickaxe","tires tuning","brakes tuning","suspension tuning","transmission tuning","engine tuning","high quality tires tuning","medium quality tires tuning","low quality tires tuning","high quality brakes tuning","medium quality brakes tuning","low quality brakes tuning","high quality suspension tuning","medium quality suspension tuning","low quality suspension tuning","high quality transmission tuning","medium quality transmission tuning","low quality transmission tuning","high quality engine tuning","medium quality engine tuning","low quality engine tuning","tuning parts","high quality tuning parts","medium quality tuning parts","low quality tuning parts"],
+items:["automatic drill","automatic drills","automatic sawmill","automatic sawmills","automatic rod","automatic rods","automatic oil well","automatic oil wells","automatic watering can","automatic watering cans","backpack skin","backpack skins","battery","batteries","Biospark","Biosparks","charger","chargers","Christmas key","Christmas keys","Christmas copper","Christmas timber","Christmas perch","Christmas seed","Christmas seeds","Christmas lollipop","Christmas lollipops","New years gift","New years gifts","Little gift","Little gifts","Big gift","Big gifts","Opened gift","Opened gifts","Drawing","Drawings","Dirty Statue","Dirty Statues","Purified Statue","Purified Statues","dice","fishing rod","fishing rods","firework","fireworks","fuel for resource extraction","Grand ticket","Grand tickets","GrandPro BodyCam","GrandPro BodyCams","hookah","hookahs","Leash","Leashes","letter","letters","license plate","license plates","custom license plate","custom license plates","regular lottery ticket","regular lottery tickets","rare lottery ticket","rare lottery tickets","flame and water lottery ticket","flame and water lottery tickets","Cayo Perico ticket","Cayo Perico tickets","Car ticket","Car tickets","Secret ticket fragment","Secret ticket fragments","Secret ticket","Secret tickets","Royal Artifacts lottery ticket","Royal Artifacts lottery tickets","luminous stone","luminous stones","milk","mushroom","mushrooms","paint can","paint cans","pearl","pearls","pet food","pet foods","pickaxe","pickaxes","Prime","Prime Platinum","repair kit","repair kits","Resource Miners ticket","Resource Miners tickets","sand","snow","solar panel","solar panels","SIM card","SIM cards","scrap metal","top quality metal","thread","threads","timber","token","tokens","tonic treat","tonic treats","Treasure Map","Treasure Maps","video card","video cards","wires","small inflatable mattress","small inflatable mattresses","large inflatable mattress","large inflatable mattresses","sponge","sponges","power booster shot","power booster shots","luminous wheels","fuel canister","fuel canisters","premium fuel canister","premium fuel canisters","solar barrel","solar barrels","gasoline barrel","gasoline barrels","kerosene barrel","kerosene barrels","letter G","letter R","letter A","letter N","letter D","GRAND letters","spatial sound effect","spatial sound effects","animated items","Fire Ring","Lightning Charge","Chick","Wizard Cat","Mister Seal","Macaque with Pacifier","Piglet on Bread","Toy Fish","Unicorn Aura","The Bat","Noodle Lover","inventory","low quality inventory","medium quality inventory","high quality inventory","max quality inventory","advanced quality inventory","low quality fishing rod","medium quality fishing rod","high quality fishing rod","max quality fishing rod","advanced quality fishing rod","low quality pickaxe","medium quality pickaxe","high quality pickaxe","max quality pickaxe","advanced quality pickaxe","tires tuning","brakes tuning","suspension tuning","transmission tuning","engine tuning","high quality tires tuning","medium quality tires tuning","low quality tires tuning","high quality brakes tuning","medium quality brakes tuning","low quality brakes tuning","high quality suspension tuning","medium quality suspension tuning","low quality suspension tuning","high quality transmission tuning","medium quality transmission tuning","low quality transmission tuning","high quality engine tuning","medium quality engine tuning","low quality engine tuning","tuning parts","high quality tuning parts","medium quality tuning parts","low quality tuning parts"],
 juices:["attack juice","attack juices","protection juice","protection juices","endurance juice","endurance juices","25% protection juice","riding juice","riding juices","power juice","power juices","immunity juice","immunity juices","fast running juice","fast running juices","juice on becoming an animal","juices on becoming an animal","juice for double the payment","juices for double the payment","10% attack juice","10% attack juices","20% attack juice","20% attack juices","10% protection juice","10% protection juices","20% protection juice","20% protection juices","juices"],
 fish:["perch","carp","salmon","trout","megalodon","ray","orca","humpback whale","fish"],
 fruits:["fruits","vegetables","fruits and vegetables","mandarin","mandarins","mandarin fruits","pumpkin","pumpkins","pumpkin fruits","strawberry","strawberries","strawberry fruits","pineapple","pineapples","pineapple fruits","cabbage","cabbages","cabbage vegetables"],
 seeds:["seeds","pineapple seed","pineapple seeds","cabbage seed","cabbage seeds","pumpkin seed","pumpkin seeds","mandarin seed","mandarin seeds","mushroom seed","mushroom seeds"],
 mining:["copper","emerald","emeralds","ruby","rubies","diamond","diamonds","obsidian","magma stone","magma stones","mining resources"],
-sounds:["Aghhhhh","Boowomp","Bonk","Bro","Brother eww","Cartoon tickle","Directed by","Duck","Faaah","Festive whistle","Goofy laugh","I love you","Kiss","Laughter","Mwahahaha","No no no no wait","Romantic","Sad violin","Skeleton hits a shield","Suspicious","Suspicious sound","Uwu","Vagabond","Whistle sound","Wooow","Yeah boy","Sad sound","Toy sound"],
-animated:["Chick","Fire Ring","Lightning Charge"],
+sounds:["Aghhhhh","Boowomp","Bonk","Bro","Brother eww","Cartoon tickle","Directed by","Duck","Faaah","Festive whistle","Goofy laugh","I love you","Kiss","Laughter","Mwahahaha","No no no no wait","Romantic","Sad violin","Skeleton hits a shield","Suspicious","Suspicious sound","Uwu","Vagabond","Whistle sound","Wooow","Yeah boy","Sad sound","Toy sound","Crickets","Six Seven"],
+animated:["Chick","Fire Ring","Lightning Charge","Wizard Cat","Mister Seal","Macaque with Pacifier","Piglet on Bread","Toy Fish","Unicorn Aura","The Bat","Noodle Lover"],
 work:["workers","truckers","a trucker","a lawyer","a DJ","a photographer","a bodyguard","a professional dancer","a personal driver","an assistant","a professional singer","firefighters","a driver","a locksmith","an electrician","a gardener","a surveyor","construction site workers"],
 services:["24/7 Store owner","Clothing Shop owner","Ammunition Store owner","Gas Station owner","Car sharing owner","Business owner","Bar owner","Tattoo studio owner","Hair salon owner","Jewelry store owner","Pet Shop owner","Warehouse owner","Parking owner","Farm owner","Service station owner","Chip tuning owner","Taxi company owner","Electric station owner","Flower shop owner","Furniture shop owner","Juice shop owner","Luna park owner","Fight club owner","Car wash owner","ATM business owner","Grand Elite owner","State object owner"],
 parties:["Party at the beach","Party at the yacht","Party at Bahama Mamas Bar","Party at Tequi-la-la Bar","Party at Vanilla Unicorn Bar","Party at Hotel Spa Bar","Party at Diamond Resort Bar","Party at Raton Canyon","Party at Cayo Perico","Party at Stadium","Party at Arena","Party at house","Pool party at house","Wedding at Church","Car meet at","exclusive car meet"],
@@ -1101,6 +1128,169 @@ addToIndex(DB.work,'👷 Work','work');
 addToIndex(DB.services,'🔧 Services','services');
 addToIndex(DB.parties,'🎉 Party','other');
 addToIndex(DB.locations,'📍 Location','other');
+
+// ============ SMART PRICE CONVERSION ============
+/**
+ * Converts user input to LifeInvader price format
+ * Rules:
+ * - 25k → 25.000
+ * - 500k → 500.000
+ * - 1.5m or 1.5M → 1.5 (with Million unit)
+ * - 1350k or 1.350k → 1.35 (with Million unit) [auto-upgrade to Million if >= 1M]
+ * - 25000 → 25.000
+ * - 1500000 → 1.5 (with Million unit) [auto-upgrade]
+ * Returns: { amount: "25.000", useMillion: false }
+ */
+function smartPriceConvert(input) {
+    if (!input) return { amount: '', useMillion: false };
+    
+    let str = String(input).trim().toLowerCase();
+    
+    // Remove $ sign if present
+    str = str.replace(/\$/g, '').trim();
+    
+    // Handle "m" or "million" suffix
+    if (str.endsWith('m') || str.endsWith('mil') || str.includes('million')) {
+        str = str.replace(/million/g, '').replace(/mil/g, '').replace(/m$/, '').trim();
+        let num = parseFloat(str.replace(/,/g, '.'));
+        if (isNaN(num)) return { amount: input, useMillion: false };
+        let display = num % 1 === 0 ? num.toString() : num.toString();
+        return { amount: display, useMillion: true };
+    }
+    
+    // Handle "k" suffix
+    if (str.endsWith('k')) {
+        str = str.replace(/k$/, '').trim();
+        // Parse: could be "25", "1.5", "1350", "1.350"
+        let num;
+        // If contains dot in middle like "1.350" - it means 1350 thousand
+        if (/^\d{1,3}\.\d{3,}$/.test(str)) {
+            num = parseFloat(str.replace('.', '')) * 1;
+            // Actually: 1.350k means 1350 thousand = 1,350,000
+            // So 1.350k = 1.35M
+        }
+        // Standard parsing
+        num = parseFloat(str.replace(/,/g, '.'));
+        if (isNaN(num)) return { amount: input, useMillion: false };
+        
+        // Convert k to actual number (× 1000)
+        let totalValue = num * 1000;
+        
+        // If result >= 1 Million, use Million format
+        if (totalValue >= 1000000) {
+            let millionValue = totalValue / 1000000;
+            let display = millionValue % 1 === 0 ? millionValue.toString() : millionValue.toString();
+            return { amount: display, useMillion: true };
+        }
+        
+        // Otherwise format as X.XXX
+        let formatted = totalValue.toLocaleString('de-DE');
+        return { amount: formatted, useMillion: false };
+    }
+    
+    // Plain number (no k, no m)
+    // Handle input like "1350000" or "1.350.000" or "1,350,000"
+    let cleanStr = str.replace(/\./g, '').replace(/,/g, '');
+    let num = parseInt(cleanStr, 10);
+    
+    if (isNaN(num)) return { amount: input, useMillion: false };
+    
+    // If >= 1 Million, convert to Million
+    if (num >= 1000000) {
+        let millionValue = num / 1000000;
+        let display = millionValue % 1 === 0 ? millionValue.toString() : millionValue.toString();
+        return { amount: display, useMillion: true };
+    }
+    
+    // If >= 1000, format with dots
+    if (num >= 1000) {
+        let formatted = num.toLocaleString('de-DE');
+        return { amount: formatted, useMillion: false };
+    }
+    
+    // Small number, return as-is
+    return { amount: num.toString(), useMillion: false };
+}
+
+// Handle main price input
+function onPriceInput(inputId, hintId, unitId) {
+    const input = document.getElementById(inputId);
+    const hint = document.getElementById(hintId);
+    const unitSelect = document.getElementById(unitId);
+    const rawValue = input.value;
+    
+    if (!rawValue.trim()) {
+        hint.textContent = '';
+        return;
+    }
+    
+    const converted = smartPriceConvert(rawValue);
+    
+    // Update the visual hint
+    if (converted.useMillion) {
+        hint.textContent = '→ $' + converted.amount + ' Million';
+        if (unitSelect) unitSelect.value = 'Million';
+    } else {
+        hint.textContent = '→ $' + converted.amount;
+        if (unitSelect) unitSelect.value = '';
+    }
+}
+
+// Handle 2nd/3rd price inputs (they need to include the $ and unit in the value)
+function onPriceInput2(inputId, hintId) {
+    const input = document.getElementById(inputId);
+    const hint = document.getElementById(hintId);
+    const rawValue = input.value;
+    
+    if (!rawValue.trim()) {
+        hint.textContent = '';
+        return;
+    }
+    
+    // Extract suffix (like "each") if present
+    let suffix = '';
+    let priceValue = rawValue;
+    const suffixMatch = rawValue.match(/^(.+?)\s+(each|per week|per week per car|each respectively)$/i);
+    if (suffixMatch) {
+        priceValue = suffixMatch[1].trim();
+        suffix = ' ' + suffixMatch[2];
+    }
+    
+    const converted = smartPriceConvert(priceValue);
+    let displayText = '→ $' + converted.amount;
+    if (converted.useMillion) displayText += ' Million';
+    if (suffix) displayText += suffix;
+    hint.textContent = displayText;
+}
+
+// Get final price value for output (used in buildAd)
+function getFinalPrice(inputId) {
+    const input = document.getElementById(inputId);
+    const rawValue = input.value.trim();
+    if (!rawValue) return { amount: '', useMillion: false };
+    return smartPriceConvert(rawValue);
+}
+
+// Get final 2nd/3rd price with suffix preserved
+function getFinal2ndPrice(inputId) {
+    const input = document.getElementById(inputId);
+    const rawValue = input.value.trim();
+    if (!rawValue) return '';
+    
+    let suffix = '';
+    let priceValue = rawValue;
+    const suffixMatch = rawValue.match(/^(.+?)\s+(each|per week|per week per car|each respectively)$/i);
+    if (suffixMatch) {
+        priceValue = suffixMatch[1].trim();
+        suffix = ' ' + suffixMatch[2];
+    }
+    
+    const converted = smartPriceConvert(priceValue);
+    let result = '$' + converted.amount;
+    if (converted.useMillion) result += ' Million';
+    if (suffix) result += suffix;
+    return result;
+}
 
 function switchTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -1225,7 +1415,6 @@ function setCat(cat) { document.getElementById('adCategory').value = cat; }
 const AN_STARTS = ['apartment','automatic','emerald','organization','old','opened','oil','atm','ammunition','arena'];
 const NO_ARTICLE = ['wires','dice','milk','sand','snow','timber','copper','obsidian','pet food','seeds','shirts','shoes','clothing','pants','trousers','shorts','letters','sim cards','stones','panels','fruits','vegetables','tickets','containers','skins','wheels','plates','masks','pets','juices','tunings','barrels','canisters','batteries','chargers','maps','rods','drills','sawmills','fireworks','statues','drawings','lollipops','gifts','tokens','pearls','pickaxes','mushrooms','sponges','threads','shots','shares','pumpkins','mandarins','strawberries','pineapples','cabbages','diamonds','rubies','emeralds','salmon','carp','perch','trout','looking for','apartments','houses','sneakers','watches','fish','mattresses','statues','tickets','fragments','biosparks','keys','plates','wells','rods','drills','sawmills','shots','hookahs','leashes','stones','tokens','tuning'];
 
-// ===== UPDATED: Removes "a/an" for businesses =====
 function autoArticle() {
     const qty = document.getElementById('qty').value;
     const propNum = document.getElementById('propNum').value.trim();
@@ -1237,12 +1426,10 @@ function autoArticle() {
     if (item.startsWith('"')) { art.value = ''; return; }
     if (lower.startsWith('looking for')) { art.value = ''; return; }
     
-    // NEW: Check if item is a business - no article needed
     if (lower.includes('business') || lower.includes('shares') || lower.includes('control')) {
         art.value = ''; return;
     }
     
-    // Check for specific private/family business names (even without "business" word)
     const allBizNames = [...DB.privateBiz, ...DB.familyBiz];
     for (const b of allBizNames) {
         const bLower = b.toLowerCase().replace(/\s+business$/i, '');
@@ -1282,8 +1469,12 @@ function buildAd() {
     const action = g('action'), qty = g('qty'), article = g('article'), item = g('itemInput');
     const propNum = g('propNum'), color = g('color'), typeNum = g('typeNum'), gender = g('gender');
     const quality = g('quality'), extra = g('extra'), item2 = g('item2'), item3 = g('item3');
-    const priceType = g('priceType'), priceAmt = g('priceAmt'), priceUnit = g('priceUnit'), priceSfx = g('priceSfx');
-    const price2 = g('price2'), price3 = g('price3'), days = g('days'), loc = g('loc');
+    const priceType = g('priceType');
+    const priceRaw = g('priceAmt'); 
+    const priceUnit = g('priceUnit');
+    const priceSfx = g('priceSfx');
+    const price2Raw = g('price2'), price3Raw = g('price3');
+    const days = g('days'), loc = g('loc');
     let cat = g('adCategory');
     
     if (['DJ looking for work','Lawyer looking for work','Bodyguard looking for work','Looking for a job'].includes(action)) {
@@ -1352,15 +1543,28 @@ function buildAd() {
     ad = ad.replace(/\s+/g, ' ').replace(/\s+,/g, ',').trim();
 
     if (priceType) {
-        if (priceAmt) {
-            let mainPrice = '$' + priceAmt;
-            if (priceUnit) mainPrice += ' ' + priceUnit;
+        if (priceRaw) {
+            // Use smart price conversion
+            const converted = smartPriceConvert(priceRaw);
+            let mainPrice = '$' + converted.amount;
+            if (converted.useMillion) {
+                mainPrice += ' Million';
+            } else if (priceUnit === 'Million') {
+                mainPrice += ' Million';
+            }
+            
+            // Convert 2nd and 3rd prices too
+            let price2Final = '';
+            let price3Final = '';
+            if (price2Raw) price2Final = getFinal2ndPrice('price2');
+            if (price3Raw) price3Final = getFinal2ndPrice('price3');
+            
             let priceStr;
-            if (price2 && price3) {
-                priceStr = priceType + ': ' + mainPrice + ', ' + price2 + ' and ' + price3;
+            if (price2Final && price3Final) {
+                priceStr = priceType + ': ' + mainPrice + ', ' + price2Final + ' and ' + price3Final;
                 if (priceSfx) priceStr += ' ' + priceSfx;
-            } else if (price2) {
-                priceStr = priceType + ': ' + mainPrice + ' and ' + price2;
+            } else if (price2Final) {
+                priceStr = priceType + ': ' + mainPrice + ' and ' + price2Final;
                 if (priceSfx) priceStr += ' ' + priceSfx;
             } else {
                 priceStr = priceType + ': ' + mainPrice;
@@ -1372,7 +1576,7 @@ function buildAd() {
         }
     }
     
-    if (days && days.startsWith('for') && priceAmt) ad += ' ' + days;
+    if (days && days.startsWith('for') && priceRaw) ad += ' ' + days;
     if (!cat && item) { cat = detectCategoryFromItem(item); if (cat) document.getElementById('adCategory').value = cat; }
     if (ad) { const lc = ad.charAt(ad.length - 1); if (lc !== '.' && lc !== ')') if (!/\d$/.test(ad)) ad += '.'; }
     showResult(ad, cat);
@@ -1416,6 +1620,9 @@ function clearAll() {
     document.getElementById('catBadge').innerHTML = '';
     document.getElementById('priceHint').textContent = 'Select action to auto-detect';
     document.getElementById('priceHint').style.color = '#997777';
+    document.getElementById('priceAmtHint').textContent = '';
+    document.getElementById('price2Hint').textContent = '';
+    document.getElementById('price3Hint').textContent = '';
 }
 
 let TEMPLATES = [];
